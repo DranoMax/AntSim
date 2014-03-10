@@ -18,4 +18,4 @@ Todo
 ----
 
 * Add nodes for ants to follow to either food or the nest.
-* Use better design patters (ie Strategy Pattern(?)).
+
