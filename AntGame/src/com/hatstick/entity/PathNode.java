@@ -2,6 +2,9 @@ package com.hatstick.entity;
 
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * PathNode defines a piece of a followable path similar to a bread crumb
+ */
 public class PathNode {
 	private Vector2 pos;
 	private PathNode prev;

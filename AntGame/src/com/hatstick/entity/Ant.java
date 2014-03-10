@@ -67,6 +67,7 @@ public class Ant extends Entity {
 
 		if (currentNode == null) {
 			currentNode = path.getLast();
+			path.getMap().put(currentNode, PathList.Type.FOOD);
 			goingHome = true;
 		}
 		
@@ -78,12 +79,14 @@ public class Ant extends Entity {
 			if (goingHome) {
 				if (currentNode.getPrev() != null) {
 					currentNode = currentNode.getPrev();
+					path.getMap().put(currentNode, PathList.Type.FOOD);
 				} else {
 					goingHome = !goingHome;
 				}
 			} else {
 				if (currentNode.getNext() != null) {
 					currentNode = currentNode.getNext();
+					path.getMap().put(currentNode, PathList.Type.FOOD);
 				} else {
 					goingHome = !goingHome;
 				}
@@ -93,23 +96,7 @@ public class Ant extends Entity {
 		setMovementBehavior(gtLocation);
 		setTarget(getMoveBehavior().move(getPosition(), getDestination()));
 	}
-	/*	
-	public void gather(HashMap<Anthill, Integer> antHills) {
-		food = 10;
-		if(path.getMap().isEmpty()) {
-			double closest = 999999999;
-
-			for ( Anthill hill : antHills.keySet() ) {
-				if (vectorDistance(this.getPosition(),hill.getPosition()) < closest) {
-					closestHill = hill;
-				}
-			}
-			setDestination(closestHill.getPosition());
-			setMovementBehavior(gtLocation);
-			getMoveBehavior().move(getPosition(), getDestination());
-		}
-	}
-	 */
+	
 	public double vectorDistance(Vector2 a, Vector2 b) {
 		return (Math.pow(a.x-b.x, 2)+Math.pow(a.y-b.y, 2));
 	}

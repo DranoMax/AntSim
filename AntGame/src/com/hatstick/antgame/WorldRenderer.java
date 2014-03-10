@@ -17,6 +17,7 @@ import com.hatstick.entity.Ant;
 import com.hatstick.entity.Anthill;
 import com.hatstick.entity.Food;
 import com.hatstick.entity.Level;
+import com.hatstick.entity.PathList;
 import com.hatstick.entity.PathNode;
 
 public class WorldRenderer {
@@ -80,14 +81,24 @@ public class WorldRenderer {
 	}
 
 	private void drawNodes(Ant ant) {
-		shapeRenderer.begin(ShapeType.Point);
-		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.ORANGE);
+		
+		PathNode head = ant.getPath().getHead();
+		/*
+		while (head.getNext() != null) {
+			shapeRenderer.line(head.getPos(), head.getNext().getPos());
+			head = head.getNext();
+		}*/
+	
 		for (PathNode node : ant.getPath().getMap().keySet()) {
-			shapeRenderer.point(node.getPos().x, node.getPos().y,0);
+			if (ant.getPath().getMap().get(node) == PathList.Type.FOOD) {
+				shapeRenderer.circle(node.getPos().x, node.getPos().y,.25f);
+			}
 		}
 		shapeRenderer.end();
 	}
-	
+
 	public void render() {
 		// clear the screen with white.
 		Gdx.gl.glClearColor(1,1,1,1);
@@ -125,8 +136,8 @@ public class WorldRenderer {
 					ant.search();
 				}
 			}
-		//	drawNodes(ant);
-			
+			drawNodes(ant);
+
 			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
 			antImage.setSize(.25f, .25f);
 			antImage.setOrigin(.25f/2, .25f/2);
