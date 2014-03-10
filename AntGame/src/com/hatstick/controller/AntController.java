@@ -10,10 +10,7 @@ public class AntController {
 
 	/** Returns velocity to target */
 	public void goToLocation(Ant ant) {
-		ant.setDesiredVelocity((ant.getDestination().cpy().sub(ant.getPosition())).nor().scl(Gdx.graphics.getDeltaTime()));
-		ant.setSteeringForce(ant.getDesiredVelocity().cpy().sub(ant.getVelocity()));
-		ant.getVelocity().add(ant.getSteeringForce());
-		ant.getPosition().add(ant.getVelocity());
+		ant.getPosition().add((ant.getDestination().cpy().sub(ant.getPosition())).nor().scl(Gdx.graphics.getDeltaTime()));
 	}
 	
 	/** Wander using random points in a radius around entity */

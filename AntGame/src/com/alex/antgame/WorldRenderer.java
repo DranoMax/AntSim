@@ -111,7 +111,7 @@ public class WorldRenderer {
 					ant.gather(level.getAnthills());
 				}
 				else {
-					ant.search(target);
+					ant.search();
 				}
 			}
 			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
