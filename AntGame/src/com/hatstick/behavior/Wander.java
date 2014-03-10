@@ -1,8 +1,8 @@
 package com.hatstick.behavior;
 
-import com.alex.interfaces.MovementBehavior;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.hatstick.interfaces.MovementBehavior;
 
 public class Wander implements MovementBehavior {
 

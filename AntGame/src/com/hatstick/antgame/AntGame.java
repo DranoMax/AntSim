@@ -1,4 +1,4 @@
-package com.alex.antgame;
+package com.hatstick.antgame;
 
 import com.badlogic.gdx.Game;
 import com.hatstick.screen.GameScreen;

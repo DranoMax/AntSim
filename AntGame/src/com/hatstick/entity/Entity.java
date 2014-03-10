@@ -1,9 +1,9 @@
 package com.hatstick.entity;
 
-import com.alex.interfaces.MovementBehavior;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.GoToLocation;
+import com.hatstick.interfaces.MovementBehavior;
 
 /** The super class from which all other objects in the world are derived */
 public abstract class Entity {

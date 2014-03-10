@@ -1,4 +1,4 @@
-package com.alex.antgame;
+package com.hatstick.antgame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -17,12 +17,14 @@ import com.hatstick.entity.Ant;
 import com.hatstick.entity.Anthill;
 import com.hatstick.entity.Food;
 import com.hatstick.entity.Level;
+import com.hatstick.entity.PathNode;
 
 public class WorldRenderer {
 
 	private OrthographicCamera cam;
-	private static final float CAMERA_WIDTH = 10f;
-	private static final float CAMERA_HEIGHT = 7f;
+	private static final float CAMERA_DISTANCE = 1;
+	private static final float CAMERA_WIDTH = 10f*CAMERA_DISTANCE;
+	private static final float CAMERA_HEIGHT = 7f*CAMERA_DISTANCE;
 
 	// Mouse touch
 	private Vector2 target;
@@ -77,6 +79,15 @@ public class WorldRenderer {
 		}
 	}
 
+	private void drawNodes(Ant ant) {
+		shapeRenderer.begin(ShapeType.Point);
+		shapeRenderer.setColor(Color.BLUE);
+		for (PathNode node : ant.getPath().getMap().keySet()) {
+			shapeRenderer.point(node.getPos().x, node.getPos().y,0);
+		}
+		shapeRenderer.end();
+	}
+	
 	public void render() {
 		// clear the screen with white.
 		Gdx.gl.glClearColor(1,1,1,1);
@@ -114,6 +125,8 @@ public class WorldRenderer {
 					ant.search();
 				}
 			}
+		//	drawNodes(ant);
+			
 			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
 			antImage.setSize(.25f, .25f);
 			antImage.setOrigin(.25f/2, .25f/2);

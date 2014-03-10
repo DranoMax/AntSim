@@ -1,5 +1,4 @@
 package com.hatstick.screen;
-import com.alex.antgame.WorldRenderer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -8,6 +7,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.hatstick.antgame.WorldRenderer;
 import com.hatstick.entity.Level;
 
 

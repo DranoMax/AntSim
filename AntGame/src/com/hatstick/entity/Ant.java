@@ -2,19 +2,18 @@ package com.hatstick.entity;
 
 import java.util.HashMap;
 
-import com.alex.interfaces.MovementBehavior;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.GoToLocation;
 import com.hatstick.behavior.Wander;
-import com.hatstick.controller.AntController;
+import com.hatstick.entity.PathNode;
 
 public class Ant extends Entity {
 	
 	private static float WAIT_TIME = 1f;
 	private float time = 6f;
 	
-	private PathNodes path;
+	private PathList path;
 	
 	private Wander wander;
 	private GoToLocation gtLocation;
@@ -33,12 +32,10 @@ public class Ant extends Entity {
 	public Ant(Vector2 position) {
 		super(position);
 		knownHills.put(new Anthill(position), 1);
-		path = new PathNodes();
-
+		path = new PathList();
+		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);
 		wander = new Wander();
 		gtLocation = new GoToLocation();
-
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void search() {
@@ -46,6 +43,9 @@ public class Ant extends Entity {
 		// Find new wander target after wait
 		time += Gdx.graphics.getDeltaTime();
 		if(time >= WAIT_TIME) {
+			// Create search node
+			path.insert(new PathNode(getPosition().cpy()), PathList.Type.SEARCH);
+			
 			setMovementBehavior(wander);
 			setTarget(getMoveBehavior().move(getPosition(), getDestination()));
 			time -= WAIT_TIME;
@@ -61,7 +61,7 @@ public class Ant extends Entity {
 			double closest = 999999999;
 			
 			for ( Anthill hill : antHills.keySet() ) {
-				if(vectorDistance(this.getPosition(),hill.getPosition()) < closest) {
+				if (vectorDistance(this.getPosition(),hill.getPosition()) < closest) {
 					closestHill = hill;
 				}
 			}
@@ -75,6 +75,10 @@ public class Ant extends Entity {
 		return (Math.pow(a.x-b.x, 2)+Math.pow(a.y-b.y, 2));
 	}
 
+	public PathList getPath() {
+		return path;
+	}
+	
 	public float getFood() {
 		return food;
 	}

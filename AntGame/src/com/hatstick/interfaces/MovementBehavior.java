@@ -1,4 +1,4 @@
-package com.alex.interfaces;
+package com.hatstick.interfaces;
 
 import com.badlogic.gdx.math.Vector2;
 
