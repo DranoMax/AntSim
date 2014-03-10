@@ -35,7 +35,7 @@ public class PathList {
 			return;
 		}
 
-		PathNode temp = findLast();
+		PathNode temp = getLast();
 		temp.setNext(node);
 		node.setPrev(temp);
 		map.put(node, type);
@@ -46,7 +46,7 @@ public class PathList {
 		return head;
 	}
 	
-	private PathNode findLast() {
+	public PathNode getLast() {
 		PathNode temp = head;
 		while(temp.getNext() != null) {
 			temp = temp.getNext();

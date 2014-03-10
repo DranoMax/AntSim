@@ -119,7 +119,7 @@ public class WorldRenderer {
 			for( Food food : level.getFood().keySet() ) {
 				if( intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
 						new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x/2)) || ant.getFood() > 0) {
-					ant.gather(level.getAnthills());
+					ant.gather();
 				}
 				else {
 					ant.search();
