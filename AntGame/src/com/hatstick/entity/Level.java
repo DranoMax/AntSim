@@ -16,11 +16,11 @@ public class Level {
 		
 		public void createWorld() {
 			for(int i = 0; i < 15; i++) {
-				antsMap.put(new Ant(new Vector2(100,70)), i);
+				antsMap.put(new Ant(new Vector2(600,300)), i);
 			}
-			antHillMap.put(new Anthill(new Vector2(100,70)), 1);
+			antHillMap.put(new Anthill(new Vector2(600,300)), 1);
 			
-			foodMap.put(new Food(new Vector2(20,20)), 1);
+			foodMap.put(new Food(new Vector2(100,100)), 1);
 		}
 		
 		public HashMap<Ant, Integer> getAnts() {

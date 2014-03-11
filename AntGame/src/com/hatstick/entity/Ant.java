@@ -38,8 +38,8 @@ public class Ant extends Entity {
 
 	public Ant(Vector2 position) {
 		super(position);
-		setSize(4f,4f);
-		setSpeed(10f);
+		setSize(5f,5f);
+		setSpeed(50f);
 		knownHills.put(new Anthill(position), 1);
 		path = new PathList();
 		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);

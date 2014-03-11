@@ -8,7 +8,7 @@ public class Food extends Entity{
 	
 	public Food(Vector2 position) {
 		super(position);
-		setSize(20f,20f);
+		setSize(60f,60f);
 		// TODO Auto-generated constructor stub
 	}
 	

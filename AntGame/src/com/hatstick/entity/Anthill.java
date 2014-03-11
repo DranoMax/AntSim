@@ -9,7 +9,7 @@ public class Anthill extends Entity {
 
 	public Anthill(Vector2 position) {
 		super(position);
-		setSize(20f,20f);
+		setSize(60f,60f);
 	}
 
 	public float getFoodStores() {

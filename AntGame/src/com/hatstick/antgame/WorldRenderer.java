@@ -24,9 +24,8 @@ import com.hatstick.entity.PathNode;
 public class WorldRenderer {
 
 	private OrthographicCamera cam;
-	private static final float CAMERA_DISTANCE = 15;
-	private static final float CAMERA_WIDTH = 10f*CAMERA_DISTANCE;
-	private static final float CAMERA_HEIGHT = 7f*CAMERA_DISTANCE;
+	private static final float CAMERA_WIDTH = 800;
+	private static final float CAMERA_HEIGHT = 480;
 
 	// Mouse touch
 	private Vector2 target;
@@ -122,10 +121,9 @@ public class WorldRenderer {
 
 			// Draw our food levels
 			spriteBatch.begin();
-			font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-			font.setScale(0.1f);
-			font.draw(spriteBatch, food.getStockpile()+"", food.getPosition().x+food.getSize().x/2, 
-					food.getPosition().y+food.getSize().x/2);
+			font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+			font.draw(spriteBatch, food.getStockpile()+"", food.getPosition().x, 
+					food.getPosition().y);
 			spriteBatch.end();
 		}
 		shapeRenderer.setColor(Color.BLACK);
@@ -134,9 +132,9 @@ public class WorldRenderer {
 
 			// Draw our food levels
 			spriteBatch.begin();
-			font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-			font.draw(spriteBatch, hill.getFoodStores()+"", hill.getPosition().x+hill.getSize().x/2, 
-					hill.getPosition().y+hill.getSize().x/2);
+			font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+			font.draw(spriteBatch, hill.getFoodStores()+"", hill.getPosition().x, 
+					hill.getPosition().y);
 			spriteBatch.end();
 		}
 		shapeRenderer.end();
@@ -160,8 +158,11 @@ public class WorldRenderer {
 			drawNodes(ant);
 
 			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
-			antImage.setSize(ant.getSize().x,ant.getSize().y);
-			antImage.setOrigin(ant.getSize().x/2, ant.getSize().y/2);
+			// Note: right now the antImage size is scaled by a factor of 5 - purely
+			// based on trial and error for looks.  Needs to be died somehow to screen
+			// size in case I decide to change it again.
+			antImage.setSize(ant.getSize().x*5,ant.getSize().y*5);
+			antImage.setOrigin(ant.getSize().x*5/2, ant.getSize().y*5/2);
 			antImage.setRotation(ant.getTarget());
 			spriteBatch.begin();
 
