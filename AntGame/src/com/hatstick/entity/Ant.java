@@ -38,6 +38,8 @@ public class Ant extends Entity {
 
 	public Ant(Vector2 position) {
 		super(position);
+		setSize(4f,4f);
+		setSpeed(10f);
 		knownHills.put(new Anthill(position), 1);
 		path = new PathList();
 		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);
@@ -54,12 +56,12 @@ public class Ant extends Entity {
 			path.insert(new PathNode(getPosition().cpy()), PathList.Type.SEARCH);
 
 			setMovementBehavior(wander);
-			setTarget(getMoveBehavior().move(getPosition(), getDestination()));
+			setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
 			time -= WAIT_TIME;
 			WAIT_TIME = (float) Math.random()*2;
 		}
 		setMovementBehavior(gtLocation);
-		getMoveBehavior().move(getPosition(), getDestination());
+		getMoveBehavior().move(getPosition(), getDestination(), getSpeed());
 	}
 
 	public void gather() {
@@ -94,7 +96,7 @@ public class Ant extends Entity {
 		}
 		setDestination(currentNode.getPos());
 		setMovementBehavior(gtLocation);
-		setTarget(getMoveBehavior().move(getPosition(), getDestination()));
+		setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
 	}
 	
 	public double vectorDistance(Vector2 a, Vector2 b) {

@@ -7,8 +7,8 @@ import com.hatstick.interfaces.MovementBehavior;
 public class GoToLocation implements MovementBehavior {
 
 	@Override
-	public float move(Vector2 position, Vector2 destination) {
-		position.add((destination.cpy().sub(position)).nor().scl(Gdx.graphics.getDeltaTime()));
+	public float move(Vector2 position, Vector2 destination, float speed) {
+		position.add((destination.cpy().sub(position)).nor().scl(Gdx.graphics.getDeltaTime()*speed));
 
 		float angle = (float) ((Math.atan2 (destination.y - position.y, -(destination.x - position.x))*180.0d/Math.PI));
 		angle -= 90;

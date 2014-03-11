@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -23,7 +24,7 @@ import com.hatstick.entity.PathNode;
 public class WorldRenderer {
 
 	private OrthographicCamera cam;
-	private static final float CAMERA_DISTANCE = 1;
+	private static final float CAMERA_DISTANCE = 15;
 	private static final float CAMERA_WIDTH = 10f*CAMERA_DISTANCE;
 	private static final float CAMERA_HEIGHT = 7f*CAMERA_DISTANCE;
 
@@ -33,6 +34,9 @@ public class WorldRenderer {
 	private Sprite antImage;
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
+
+	private BitmapFont font;
+
 
 	private static Intersector intersector = new Intersector();
 
@@ -55,6 +59,8 @@ public class WorldRenderer {
 		antImage = new Sprite(new Texture(Gdx.files.internal("data/ant.png")));
 		spriteBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
+
+		font = new BitmapFont();
 	}
 
 	public void setZoom(float i) {
@@ -83,14 +89,14 @@ public class WorldRenderer {
 	private void drawNodes(Ant ant) {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.ORANGE);
-		
+
 		PathNode head = ant.getPath().getHead();
 		/*
 		while (head.getNext() != null) {
 			shapeRenderer.line(head.getPos(), head.getNext().getPos());
 			head = head.getNext();
 		}*/
-	
+
 		for (PathNode node : ant.getPath().getMap().keySet()) {
 			if (ant.getPath().getMap().get(node) == PathList.Type.FOOD) {
 				shapeRenderer.circle(node.getPos().x, node.getPos().y,.25f);
@@ -113,10 +119,25 @@ public class WorldRenderer {
 
 		for( Food food : level.getFood().keySet() ) {
 			shapeRenderer.circle(food.getPosition().x, food.getPosition().y, food.getSize().x);
+
+			// Draw our food levels
+			spriteBatch.begin();
+			font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			font.setScale(0.1f);
+			font.draw(spriteBatch, food.getStockpile()+"", food.getPosition().x+food.getSize().x/2, 
+					food.getPosition().y+food.getSize().x/2);
+			spriteBatch.end();
 		}
 		shapeRenderer.setColor(Color.BLACK);
 		for( Anthill hill : level.getAnthills().keySet() ) {
 			shapeRenderer.circle(hill.getPosition().x, hill.getPosition().y, hill.getSize().x);
+
+			// Draw our food levels
+			spriteBatch.begin();
+			font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			font.draw(spriteBatch, hill.getFoodStores()+"", hill.getPosition().x+hill.getSize().x/2, 
+					hill.getPosition().y+hill.getSize().x/2);
+			spriteBatch.end();
 		}
 		shapeRenderer.end();
 
@@ -139,8 +160,8 @@ public class WorldRenderer {
 			drawNodes(ant);
 
 			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
-			antImage.setSize(.25f, .25f);
-			antImage.setOrigin(.25f/2, .25f/2);
+			antImage.setSize(ant.getSize().x,ant.getSize().y);
+			antImage.setOrigin(ant.getSize().x/2, ant.getSize().y/2);
 			antImage.setRotation(ant.getTarget());
 			spriteBatch.begin();
 

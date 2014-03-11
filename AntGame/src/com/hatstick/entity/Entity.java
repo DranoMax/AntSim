@@ -8,11 +8,13 @@ import com.hatstick.interfaces.MovementBehavior;
 /** The super class from which all other objects in the world are derived */
 public abstract class Entity {
 
-	private static Vector2 SIZE = new Vector2(0.25f,0.25f); 
+	private Vector2 SIZE = new Vector2(1f,1f); 
 
 	private Vector2 position = new Vector2();
 	
 	private Vector2 destination = new Vector2();
+	
+	private float speed = 0;
 	
 	private State state = State.IDLE;
 	
@@ -38,7 +40,7 @@ public abstract class Entity {
 	// Begin massive list of setters/getters ***********************************
 	
 	public void performMove() {
-		getMoveBehavior().move(position,destination);
+		getMoveBehavior().move(position,destination,speed);
 	}
 	
 	public void setMovementBehavior(MovementBehavior mv) {
@@ -101,5 +103,13 @@ public abstract class Entity {
 
 	public void setMoveBehavior(MovementBehavior moveBehavior) {
 		this.moveBehavior = moveBehavior;
+	}
+
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
 	}
 }
