@@ -64,7 +64,6 @@ public class Ant extends Entity {
 	}
 
 	public void gather() {
-		food = 10;
 
 		if (currentNode == null) {
 			currentNode = path.getLast();
@@ -104,6 +103,14 @@ public class Ant extends Entity {
 
 	public PathList getPath() {
 		return path;
+	}
+	
+	/**
+	 * Called when ant enters a food pile.  Takes food if ant
+	 * has available space.
+	 */
+	public void takeFood() {
+		
 	}
 
 	public float getFood() {
