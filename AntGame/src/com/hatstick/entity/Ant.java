@@ -39,7 +39,7 @@ public class Ant extends Entity {
 	public Ant(Vector2 position) {
 		super(position);
 		setSize(5f,5f);
-		setSpeed(50f);
+		setSpeed(70f);
 		knownHills.put(new Anthill(position), 1);
 		path = new PathList();
 		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);
@@ -48,7 +48,6 @@ public class Ant extends Entity {
 	}
 
 	public void search() {
-
 		// Find new wander target after wait
 		time += Gdx.graphics.getDeltaTime();
 		if(time >= WAIT_TIME) {
@@ -58,7 +57,7 @@ public class Ant extends Entity {
 			setMovementBehavior(wander);
 			setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
 			time -= WAIT_TIME;
-			WAIT_TIME = (float) Math.random()*2;
+			WAIT_TIME = (float) Math.random()*3;
 		}
 		setMovementBehavior(gtLocation);
 		getMoveBehavior().move(getPosition(), getDestination(), getSpeed());

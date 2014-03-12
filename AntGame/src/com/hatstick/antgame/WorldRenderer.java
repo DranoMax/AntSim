@@ -80,8 +80,8 @@ public class WorldRenderer {
 			angle -= 90;
 			if(angle < 0) angle = 360-(-angle);
 			angle = 360-angle;
-			ant.setTarget(angle);
-			ant.setDestination(target);
+		//	ant.setTarget(angle);
+		//	ant.setDestination(target);
 		}
 	}
 
