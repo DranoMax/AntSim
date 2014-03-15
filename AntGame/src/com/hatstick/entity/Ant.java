@@ -20,7 +20,7 @@ public class Ant extends Entity {
 	/**
 	 * Used for 'fudging' float measurements
 	 */
-	private float epsilon = .01f;
+	private float epsilon = .2f;
 
 	private Wander wander;
 	private GoToLocation gtLocation;

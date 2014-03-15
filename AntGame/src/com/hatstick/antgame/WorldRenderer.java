@@ -98,7 +98,7 @@ public class WorldRenderer {
 
 		for (PathNode node : ant.getPath().getMap().keySet()) {
 			if (ant.getPath().getMap().get(node) == PathList.Type.FOOD) {
-				shapeRenderer.circle(node.getPos().x, node.getPos().y,.25f);
+				shapeRenderer.circle(node.getPos().x, node.getPos().y,5f);
 			}
 		}
 		shapeRenderer.end();
