@@ -7,8 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.GoToLocation;
 import com.hatstick.behavior.Wander;
 import com.hatstick.entity.PathNode;
+import com.hatstick.interfaces.State;
 
-public class Ant extends Entity {
+public class Ant extends MovingEntity {
 
 	private static float WAIT_TIME = 1f;
 	private float time = 6f;
@@ -67,12 +68,12 @@ public class Ant extends Entity {
 			// Create search node
 			path.insert(new PathNode(getPosition().cpy()), PathList.Type.SEARCH);
 
-			setMovementBehavior(wander);
+			setMoveBehavior(wander);
 			setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
 			time -= WAIT_TIME;
 			WAIT_TIME = (float) Math.random()*3;
 		}
-		setMovementBehavior(gtLocation);
+		setMoveBehavior(gtLocation);
 		getMoveBehavior().move(getPosition(), getDestination(), getSpeed());
 	}
 
@@ -109,7 +110,7 @@ public class Ant extends Entity {
 			}
 		}
 		setDestination(currentNode.getPos());
-		setMovementBehavior(gtLocation);
+		setMoveBehavior(gtLocation);
 		setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
 	}
 

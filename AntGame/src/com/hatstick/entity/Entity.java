@@ -12,22 +12,7 @@ public abstract class Entity {
 
 	private Vector2 position = new Vector2();
 	
-	private Vector2 destination = new Vector2();
-	
-	private float speed = 0;
-	
-	private State state = State.IDLE;
-	
 	private Circle boundingCircle = new Circle();
-	
-	private MovementBehavior moveBehavior;
-	
-	// Degree angle towards target (for properly displaying image)
-	private float target = 0;
-
-	public enum State {
-		IDLE, SEARCHING, GATHERING
-	}
 	
 	public Entity(Vector2 position) {
 		this.position = position;
@@ -38,12 +23,6 @@ public abstract class Entity {
 	}
 
 	// Begin massive list of setters/getters ***********************************
-	
-	public abstract void performMove();
-	
-	public void setMovementBehavior(MovementBehavior mv) {
-		setMoveBehavior(mv);
-	}
 	
 	public void setBoundingCircle(float x, float y) {
 		boundingCircle.x = x;
@@ -69,45 +48,5 @@ public abstract class Entity {
 
 	public Vector2 getSize() {
 		return SIZE;
-	}
-	
-	public void setState(State newState) {
-		this.state = newState;
-	}
-
-	public State getState() {
-		return state;
-	}
-	
-	public Vector2 getDestination() {
-		return destination;
-	}
-
-	public void setDestination(Vector2 destination) {
-		this.destination = destination;
-	}
-	
-	public void setTarget(float target) {
-		this.target = target;
-	}
-	
-	public float getTarget() {
-		return target;
-	}
-
-	public MovementBehavior getMoveBehavior() {
-		return moveBehavior;
-	}
-
-	public void setMoveBehavior(MovementBehavior moveBehavior) {
-		this.moveBehavior = moveBehavior;
-	}
-
-	public float getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(float speed) {
-		this.speed = speed;
 	}
 }

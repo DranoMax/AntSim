@@ -23,9 +23,4 @@ public class Anthill extends Entity {
 	public void putFood(double food) {
 		foodStores += food;
 	}
-
-	@Override
-	public void performMove() {
-		// Doesn't move	
-	}
 }

@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.hatstick.entity.Ant;
 import com.hatstick.entity.Anthill;
-import com.hatstick.entity.Entity.State;
+import com.hatstick.interfaces.State;
 import com.hatstick.entity.Food;
 import com.hatstick.entity.Level;
 import com.hatstick.entity.PathList;
