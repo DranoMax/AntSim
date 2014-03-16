@@ -13,7 +13,7 @@ public class Ant extends Entity {
 	private static float WAIT_TIME = 1f;
 	private float time = 6f;
 
-	private PathList path;
+	private PathList path = new PathList();;
 	private PathNode currentNode = null;
 	private boolean goingHome = false;
 
@@ -23,7 +23,7 @@ public class Ant extends Entity {
 	private float epsilon = 1f;
 
 	private Wander wander;
-	private GoToLocation gtLocation;
+	private GoToLocation gtLocation = new GoToLocation();;
 
 	Anthill closestHill = null;
 
@@ -41,10 +41,8 @@ public class Ant extends Entity {
 		setSize(5f,5f);
 		setSpeed(70f);
 		knownHills.put(new Anthill(position), 1);
-		path = new PathList();
 		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);
 		wander = new Wander();
-		gtLocation = new GoToLocation();
 		setState(State.SEARCHING);
 	}
 
@@ -129,6 +127,15 @@ public class Ant extends Entity {
 	 */
 	public void takeFood(Food food) {
 		setFood(food.takeFood(10));
+	}
+	
+	/**
+	 * Called when ant enters anthill with food.  Places all
+	 * carried food into said anthill.
+	 */
+	public void putFood(Anthill hill) {
+		hill.putFood(food);
+		food = 0;
 	}
 
 	public double getFood() {

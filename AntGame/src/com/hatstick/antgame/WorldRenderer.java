@@ -115,6 +115,7 @@ public class WorldRenderer {
 
 			// Draw our food levels
 			spriteBatch.begin();
+			font.setScale(1.5f);
 			font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
 			font.draw(spriteBatch, food.getStockpile()+"", food.getPosition().x, 
 					food.getPosition().y);
@@ -146,8 +147,14 @@ public class WorldRenderer {
 					ant.takeFood(food);
 					ant.setState(State.GATHERING);
 				}
-				ant.performMove();
 			}
+			for( Anthill hill : level.getAnthills().keySet() ) {
+				if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
+						new Circle(hill.getPosition().x, hill.getPosition().y, hill.getSize().x)) && ant.getFood() > 0) {
+					ant.putFood(hill);
+				}
+			}
+			ant.performMove();
 			drawNodes(ant);
 
 			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
