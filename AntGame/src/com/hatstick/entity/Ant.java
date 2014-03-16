@@ -16,11 +16,11 @@ public class Ant extends Entity {
 	private PathList path;
 	private PathNode currentNode = null;
 	private boolean goingHome = false;
-	
+
 	/**
 	 * Used for 'fudging' float measurements
 	 */
-	private float epsilon = .2f;
+	private float epsilon = 1f;
 
 	private Wander wander;
 	private GoToLocation gtLocation;
@@ -34,7 +34,7 @@ public class Ant extends Entity {
 	// they will seek out their anthill
 
 	/** How much food the ant has if any */
-	private float food = 0;
+	private double food = 0;
 
 	public Ant(Vector2 position) {
 		super(position);
@@ -45,6 +45,21 @@ public class Ant extends Entity {
 		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);
 		wander = new Wander();
 		gtLocation = new GoToLocation();
+		setState(State.SEARCHING);
+	}
+
+	@Override
+	public void performMove() {
+		switch(this.getState()) {
+		case SEARCHING:
+			search();
+			break;
+		case GATHERING:
+			gather();
+			break;
+		case IDLE: 
+			break;	
+		}
 	}
 
 	public void search() {
@@ -64,18 +79,21 @@ public class Ant extends Entity {
 	}
 
 	public void gather() {
-
+		
+		/**
+		 * Found the end of path to food
+		 */
 		if (currentNode == null) {
 			currentNode = path.getLast();
+			currentNode.setPos(getPosition());
 			path.getMap().put(currentNode, PathList.Type.FOOD);
 			goingHome = true;
 		}
-		
-		float x = getPosition().x - currentNode.getPos().x;
-		float y = getPosition().y - currentNode.getPos().y;
-	
+
+		Vector2 temp = getPosition().cpy().sub(currentNode.getPos());
+
 		// Determine if ant is within reasonable distance of node
-		if (Math.abs(x) < epsilon && Math.abs(y) < epsilon) {
+		if (Math.abs(temp.x) < epsilon && Math.abs(temp.y) < epsilon) {
 			if (goingHome) {
 				if (currentNode.getPrev() != null) {
 					currentNode = currentNode.getPrev();
@@ -96,7 +114,7 @@ public class Ant extends Entity {
 		setMovementBehavior(gtLocation);
 		setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
 	}
-	
+
 	public double vectorDistance(Vector2 a, Vector2 b) {
 		return (Math.pow(a.x-b.x, 2)+Math.pow(a.y-b.y, 2));
 	}
@@ -104,20 +122,20 @@ public class Ant extends Entity {
 	public PathList getPath() {
 		return path;
 	}
-	
+
 	/**
 	 * Called when ant enters a food pile.  Takes food if ant
 	 * has available space.
 	 */
-	public void takeFood() {
-		
+	public void takeFood(Food food) {
+		setFood(food.takeFood(10));
 	}
 
-	public float getFood() {
+	public double getFood() {
 		return food;
 	}
 
-	public void setFood(float food) {
+	public void setFood(double food) {
 		this.food = food;
 	}
 }

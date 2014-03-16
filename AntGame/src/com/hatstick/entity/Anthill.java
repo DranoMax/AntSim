@@ -19,4 +19,9 @@ public class Anthill extends Entity {
 	public void setFoodStores(float foodStores) {
 		this.foodStores = foodStores;
 	}
+
+	@Override
+	public void performMove() {
+		// Doesn't move	
+	}
 }

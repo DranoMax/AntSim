@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.hatstick.entity.Ant;
 import com.hatstick.entity.Anthill;
+import com.hatstick.entity.Entity.State;
 import com.hatstick.entity.Food;
 import com.hatstick.entity.Level;
 import com.hatstick.entity.PathList;
@@ -35,10 +36,6 @@ public class WorldRenderer {
 	private ShapeRenderer shapeRenderer;
 
 	private BitmapFont font;
-
-
-	private static Intersector intersector = new Intersector();
-
 
 	private Level level;
 
@@ -80,8 +77,8 @@ public class WorldRenderer {
 			angle -= 90;
 			if(angle < 0) angle = 360-(-angle);
 			angle = 360-angle;
-		//	ant.setTarget(angle);
-		//	ant.setDestination(target);
+			//	ant.setTarget(angle);
+			//	ant.setDestination(target);
 		}
 	}
 
@@ -89,17 +86,14 @@ public class WorldRenderer {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.ORANGE);
 
-		PathNode head = ant.getPath().getHead();
-		/*
-		while (head.getNext() != null) {
-			shapeRenderer.line(head.getPos(), head.getNext().getPos());
-			head = head.getNext();
-		}*/
-
 		for (PathNode node : ant.getPath().getMap().keySet()) {
 			if (ant.getPath().getMap().get(node) == PathList.Type.FOOD) {
-				shapeRenderer.circle(node.getPos().x, node.getPos().y,5f);
+				shapeRenderer.setColor(Color.ORANGE);
 			}
+			else {
+				shapeRenderer.setColor(Color.BLUE);
+			}
+			shapeRenderer.circle(node.getPos().x, node.getPos().y,2f);
 		}
 		shapeRenderer.end();
 	}
@@ -147,13 +141,12 @@ public class WorldRenderer {
 		for( Ant ant : level.getAnts().keySet() ) {
 
 			for( Food food : level.getFood().keySet() ) {
-				if( intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
-						new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x/2)) || ant.getFood() > 0) {
-					ant.gather();
+				if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
+						new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x)) && ant.getFood() == 0) {
+					ant.takeFood(food);
+					ant.setState(State.GATHERING);
 				}
-				else {
-					ant.search();
-				}
+				ant.performMove();
 			}
 			drawNodes(ant);
 

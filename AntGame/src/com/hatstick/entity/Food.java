@@ -31,4 +31,9 @@ public class Food extends Entity{
 	public void setStockpile(double stockpile) {
 		this.stockpile = stockpile;
 	}
+
+	@Override
+	public void performMove() {
+		// Doesn't move (yet)	
+	}
 }

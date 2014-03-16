@@ -18,7 +18,7 @@ public class GoToLocation implements MovementBehavior {
 		temp = position.cpy().sub(destination);
 
 		// Determine if ant is within reasonable distance of destination (to prevent graphical issues)
-		if (Math.abs(temp.x) > epsilon && Math.abs(temp.y) > epsilon) {
+		if (Math.abs(temp.x) > epsilon || Math.abs(temp.y) > epsilon) {
 			position.add((destination.cpy().sub(position)).nor().scl(Gdx.graphics.getDeltaTime()*speed));
 		}
 		float angle = (float) ((Math.atan2 (destination.y - position.y, -(destination.x - position.x))*180.0d/Math.PI));

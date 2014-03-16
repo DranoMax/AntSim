@@ -26,7 +26,7 @@ public abstract class Entity {
 	private float target = 0;
 
 	public enum State {
-		IDLE, WALKING, JUMPING, DYING, ATTACKING
+		IDLE, SEARCHING, GATHERING
 	}
 	
 	public Entity(Vector2 position) {
@@ -39,9 +39,7 @@ public abstract class Entity {
 
 	// Begin massive list of setters/getters ***********************************
 	
-	public void performMove() {
-		getMoveBehavior().move(position,destination,speed);
-	}
+	public abstract void performMove();
 	
 	public void setMovementBehavior(MovementBehavior mv) {
 		setMoveBehavior(mv);
