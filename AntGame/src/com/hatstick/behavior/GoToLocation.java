@@ -9,7 +9,7 @@ public class GoToLocation implements MovementBehavior {
 	/**
 	 * Used for 'fudging' float measurements
 	 */
-	private float epsilon = .2f;
+	private float epsilon = 1f;
 	private Vector2 temp;
 
 	@Override

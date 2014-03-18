@@ -40,7 +40,7 @@ public class Ant extends MovingEntity {
 	public Ant(Vector2 position) {
 		super(position);
 		setSize(5f,5f);
-		setSpeed(70f);
+		setSpeed(100f);
 		knownHills.put(new Anthill(position), 1);
 		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);
 		wander = new Wander();
