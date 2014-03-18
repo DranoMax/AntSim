@@ -9,12 +9,13 @@ public class GoToLocation implements MovementBehavior {
 	/**
 	 * Used for 'fudging' float measurements
 	 */
-	private float epsilon = 1f;
+	private float epsilon;
 	private Vector2 temp;
 
 	@Override
 	public float move(Vector2 position, Vector2 destination, float speed) {
-
+		
+		epsilon =  Gdx.graphics.getDeltaTime()*speed;
 		temp = position.cpy().sub(destination);
 
 		// Determine if ant is within reasonable distance of destination (to prevent graphical issues)

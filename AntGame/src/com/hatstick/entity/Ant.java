@@ -78,7 +78,6 @@ public class Ant extends MovingEntity {
 	}
 
 	public void gather() {
-		
 		/**
 		 * Found the end of path to food
 		 */
@@ -92,7 +91,7 @@ public class Ant extends MovingEntity {
 		Vector2 temp = getPosition().cpy().sub(currentNode.getPos());
 
 		// Determine if ant is within reasonable distance of node
-		if (Math.abs(temp.x) < epsilon && Math.abs(temp.y) < epsilon) {
+		if (Math.abs(temp.x) < getSpeed()*Gdx.graphics.getDeltaTime() && Math.abs(temp.y) < getSpeed()*Gdx.graphics.getDeltaTime()) {
 			if (goingHome) {
 				if (currentNode.getPrev() != null) {
 					currentNode = currentNode.getPrev();
