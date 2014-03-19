@@ -11,9 +11,6 @@ import com.hatstick.interfaces.State;
 
 public class Ant extends MovingEntity {
 
-	private static float WAIT_TIME = 1f;
-	private float time = 6f;
-
 	private PathList path = new PathList();;
 	private PathNode currentNode = null;
 	private boolean goingHome = false;
@@ -51,7 +48,10 @@ public class Ant extends MovingEntity {
 	public void performMove() {
 		switch(this.getState()) {
 		case SEARCHING:
-			search();
+			if(!(getMoveBehavior() instanceof Wander)) {
+				setMoveBehavior(wander);
+			}
+			setTarget(getMoveBehavior().move(getPosition(), getDestination(), path, getSpeed()));
 			break;
 		case GATHERING:
 			gather();
@@ -59,22 +59,6 @@ public class Ant extends MovingEntity {
 		case IDLE: 
 			break;	
 		}
-	}
-
-	public void search() {
-		// Find new wander target after wait
-		time += Gdx.graphics.getDeltaTime();
-		if(time >= WAIT_TIME) {
-			// Create search node
-			path.insert(new PathNode(getPosition().cpy()), PathList.Type.SEARCH);
-
-			setMoveBehavior(wander);
-			setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
-			time -= WAIT_TIME;
-			WAIT_TIME = (float) Math.random()*3;
-		}
-		setMoveBehavior(gtLocation);
-		getMoveBehavior().move(getPosition(), getDestination(), getSpeed());
 	}
 
 	public void gather() {
@@ -89,9 +73,10 @@ public class Ant extends MovingEntity {
 		}
 
 		Vector2 temp = getPosition().cpy().sub(currentNode.getPos());
+		float temp2 = getSpeed()*Gdx.graphics.getDeltaTime();
 
 		// Determine if ant is within reasonable distance of node
-		if (Math.abs(temp.x) < getSpeed()*Gdx.graphics.getDeltaTime() && Math.abs(temp.y) < getSpeed()*Gdx.graphics.getDeltaTime()) {
+		if (Math.abs(temp.x) < temp2 && Math.abs(temp.y) < temp2) {
 			if (goingHome) {
 				if (currentNode.getPrev() != null) {
 					currentNode = currentNode.getPrev();
@@ -110,7 +95,7 @@ public class Ant extends MovingEntity {
 		}
 		setDestination(currentNode.getPos());
 		setMoveBehavior(gtLocation);
-		setTarget(getMoveBehavior().move(getPosition(), getDestination(), getSpeed()));
+		setTarget(getMoveBehavior().move(getPosition(), getDestination(), null, getSpeed()));
 	}
 
 	public double vectorDistance(Vector2 a, Vector2 b) {
@@ -128,7 +113,7 @@ public class Ant extends MovingEntity {
 	public void takeFood(Food food) {
 		setFood(food.takeFood(10));
 	}
-	
+
 	/**
 	 * Called when ant enters anthill with food.  Places all
 	 * carried food into said anthill.

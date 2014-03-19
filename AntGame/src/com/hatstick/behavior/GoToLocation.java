@@ -2,6 +2,8 @@ package com.hatstick.behavior;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.hatstick.entity.PathList;
+import com.hatstick.entity.PathNode;
 import com.hatstick.interfaces.MovementBehavior;
 
 public class GoToLocation implements MovementBehavior {
@@ -13,7 +15,7 @@ public class GoToLocation implements MovementBehavior {
 	private Vector2 temp;
 
 	@Override
-	public float move(Vector2 position, Vector2 destination, float speed) {
+	public float move(Vector2 position, Vector2 destination, PathList path, float speed) {
 		
 		epsilon =  Gdx.graphics.getDeltaTime()*speed;
 		temp = position.cpy().sub(destination);
