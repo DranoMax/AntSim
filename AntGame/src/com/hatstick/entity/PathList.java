@@ -1,7 +1,9 @@
 package com.hatstick.entity;
 
 import java.util.HashMap;
+
 import com.hatstick.entity.PathNode;
+import com.hatstick.interfaces.State;
 
 /** Ants will create pheromone trails leading to food/war/bathroom/ect 
  *  If another ant crosses within range of one of these nodes and if it's
@@ -9,28 +11,21 @@ import com.hatstick.entity.PathNode;
  *  until it wants something else. */
 public class PathList {
 	
-	/**
-	 * Type of paths
-	 */
-	public enum Type {
-		SEARCH, FOOD, WAR
-	}
-	
 	private PathNode head;
 	private int size;
 
-	private HashMap<PathNode,Type> map;
+	private HashMap<PathNode,State> map;
 	
 	public PathList() {
 		head = null;
 		size = 0;
-		setMap(new HashMap<PathNode,Type>());
+		setMap(new HashMap<PathNode,State>());
 	}
 	
-	public void insert(PathNode node, Type type) {
+	public void insert(PathNode node, State state) {
 		if (head == null) {
 			head = node;
-			map.put(head, type);
+			map.put(head, state);
 			size++;
 			return;
 		}
@@ -38,7 +33,7 @@ public class PathList {
 		PathNode temp = getLast();
 		temp.setNext(node);
 		node.setPrev(temp);
-		map.put(node, type);
+		map.put(node, state);
 		size++;
 	}
 	
@@ -58,11 +53,11 @@ public class PathList {
 		return size;
 	}
 	
-	public HashMap<PathNode,Type> getMap() {
+	public HashMap<PathNode,State> getMap() {
 		return map;
 	}
 
-	public void setMap(HashMap<PathNode,Type> map) {
+	public void setMap(HashMap<PathNode,State> map) {
 		this.map = map;
 	}
 }

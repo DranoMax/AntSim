@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.hatstick.entity.PathList;
 import com.hatstick.entity.PathNode;
 import com.hatstick.interfaces.MovementBehavior;
+import com.hatstick.interfaces.State;
 
 public class Gather implements MovementBehavior {
 	
@@ -21,7 +22,7 @@ public class Gather implements MovementBehavior {
 		if (currentNode == null) {
 			currentNode = path.getLast();
 			currentNode.setPos(position);
-			path.getMap().put(currentNode, PathList.Type.FOOD);
+			path.getMap().put(currentNode, State.GATHERING);
 			goingHome = true;
 		}
 		
@@ -37,7 +38,7 @@ public class Gather implements MovementBehavior {
 				if (currentNode.getPrev() != null) {
 					currentNode = currentNode.getPrev();
 					// We've found food! Update pheremone trail (path) to indicate food
-					path.getMap().put(currentNode, PathList.Type.FOOD);
+					path.getMap().put(currentNode, State.GATHERING);
 					// Else, turn around
 				} else {
 					goingHome = !goingHome;
@@ -45,7 +46,7 @@ public class Gather implements MovementBehavior {
 			} else {
 				if (currentNode.getNext() != null) {
 					currentNode = currentNode.getNext();
-					path.getMap().put(currentNode, PathList.Type.FOOD);
+					path.getMap().put(currentNode, State.GATHERING);
 				} else {
 					goingHome = !goingHome;
 				}

@@ -32,7 +32,7 @@ public class Ant extends MovingEntity {
 		setSize(5f,5f);
 		setSpeed(100f);
 	//	knownHills.put(new Anthill(position), 1);
-		path.insert(new PathNode(path.size(),getPosition()), PathList.Type.SEARCH);
+		path.insert(new PathNode(path.size(),getPosition()), State.SEARCHING);
 		setState(State.SEARCHING);
 	}
 

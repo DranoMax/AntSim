@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.hatstick.entity.PathList;
 import com.hatstick.entity.PathNode;
 import com.hatstick.interfaces.MovementBehavior;
+import com.hatstick.interfaces.State;
 
 public class Wander implements MovementBehavior {
 
@@ -20,7 +21,7 @@ public class Wander implements MovementBehavior {
 		time += Gdx.graphics.getDeltaTime();
 		if(time >= WAIT_TIME) {
 			// Create search node
-			path.insert(new PathNode(path.size(),position.cpy()), PathList.Type.SEARCH);
+			path.insert(new PathNode(path.size(),position.cpy()), State.SEARCHING);
 			// Find random point along circumference of circle of radius=speed.
 			// double a represents an angle found at random.
 			double a = Math.PI*2*Math.random();
