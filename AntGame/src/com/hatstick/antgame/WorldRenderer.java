@@ -87,7 +87,12 @@ public class WorldRenderer {
 		shapeRenderer.setColor(Color.ORANGE);
 
 		for (PathNode node : ant.getPath().getMap().keySet()) {
-			if (ant.getPath().getMap().get(node) == PathList.Type.FOOD) {
+			if (ant.getPath().getMap().get(node) == PathList.Type.FOOD && (node.getId() == 0 || node.getId() == ant.getPath().size()-1)) {
+				System.out.println(node.getId());
+				shapeRenderer.setColor(Color.RED);
+				shapeRenderer.circle(node.getPos().x, node.getPos().y,4f);
+			}
+			else if (ant.getPath().getMap().get(node) == PathList.Type.FOOD) {
 				shapeRenderer.setColor(Color.ORANGE);
 			}
 			else {

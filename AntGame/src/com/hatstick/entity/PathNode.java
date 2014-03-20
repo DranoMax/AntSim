@@ -6,12 +6,15 @@ import com.badlogic.gdx.math.Vector2;
  * PathNode defines a piece of a followable path similar to a bread crumb
  */
 public class PathNode {
+	
+	private int id;
 	private Vector2 pos;
 	private PathNode prev;
 	private PathNode next;
 	
-	public PathNode(Vector2 pos) {
-		this.setPos(pos);
+	public PathNode(int id, Vector2 pos) {
+		this.id = id;
+		this.pos = pos;
 		setPrev(null);
 		setNext(null);
 	}
@@ -20,6 +23,10 @@ public class PathNode {
 		this.setPos(pos);
 		this.setPrev(prev);
 		setNext(null);
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	public PathNode getNext() {

@@ -15,12 +15,12 @@ public class Wander implements MovementBehavior {
 	@Override
 	// Note, we use speed in Wander to determine radius of random circle
 	public float move(Vector2 position, Vector2 destination, PathList path, float speed) {
-System.out.println(time);
+		
 		// Find new wander target after wait
 		time += Gdx.graphics.getDeltaTime();
 		if(time >= WAIT_TIME) {
 			// Create search node
-			path.insert(new PathNode(position.cpy()), PathList.Type.SEARCH);
+			path.insert(new PathNode(path.size(),position.cpy()), PathList.Type.SEARCH);
 			// Find random point along circumference of circle of radius=speed.
 			// double a represents an angle found at random.
 			double a = Math.PI*2*Math.random();
@@ -29,7 +29,7 @@ System.out.println(time);
 			WAIT_TIME = (float) Math.random()*3;
 		}
 		goToLocation.move(position, destination, path, speed);
-
+		
 		return goToLocation.move(position, destination, path, speed);
 	}
 }
