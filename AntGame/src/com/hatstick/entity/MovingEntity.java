@@ -6,8 +6,8 @@ import com.hatstick.interfaces.State;
 
 public abstract class MovingEntity extends Entity {
 	
-	public MovingEntity(Vector2 position) {
-		super(position);
+	public MovingEntity(int id, Vector2 position) {
+		super(id, position);
 	}
 	
 	private State state = State.IDLE;

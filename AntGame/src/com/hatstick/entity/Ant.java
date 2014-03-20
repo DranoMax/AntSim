@@ -34,11 +34,11 @@ public class Ant extends MovingEntity {
 	/** How much food the ant has if any */
 	private double food = 0;
 
-	public Ant(Vector2 position) {
-		super(position);
+	public Ant(int id, Vector2 position) {
+		super(id, position);
 		setSize(5f,5f);
 		setSpeed(100f);
-		knownHills.put(new Anthill(position), 1);
+	//	knownHills.put(new Anthill(position), 1);
 		path.insert(new PathNode(getPosition()), PathList.Type.SEARCH);
 		wander = new Wander();
 		setState(State.SEARCHING);
@@ -51,10 +51,11 @@ public class Ant extends MovingEntity {
 			if(!(getMoveBehavior() instanceof Wander)) {
 				setMoveBehavior(wander);
 			}
+			System.out.print(getId() + " ");
 			setTarget(getMoveBehavior().move(getPosition(), getDestination(), path, getSpeed()));
 			break;
 		case GATHERING:
-			gather();
+			//gather();
 			break;
 		case IDLE: 
 			break;	

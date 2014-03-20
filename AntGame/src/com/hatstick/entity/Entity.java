@@ -14,9 +14,11 @@ public abstract class Entity {
 	
 	private Circle boundingCircle = new Circle();
 	
-	public Entity(Vector2 position) {
+	private int id;
+	
+	public Entity(int id, Vector2 position) {
 		this.position = position;
-
+		this.id = id;
 		boundingCircle.x = position.x + getSize().x/2;
 		boundingCircle.y = position.y;
 		boundingCircle.radius = 50;
@@ -48,5 +50,9 @@ public abstract class Entity {
 
 	public Vector2 getSize() {
 		return SIZE;
+	}
+	
+	public int getId() {
+		return id;
 	}
 }

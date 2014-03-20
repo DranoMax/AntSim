@@ -7,8 +7,8 @@ public class Anthill extends Entity {
 	
 	private double foodStores = 0;
 
-	public Anthill(Vector2 position) {
-		super(position);
+	public Anthill(int id, Vector2 position) {
+		super(id, position);
 		setSize(60f,60f);
 	}
 

@@ -6,8 +6,8 @@ public class Food extends Entity{
 
 	private double stockpile = 100;
 	
-	public Food(Vector2 position) {
-		super(position);
+	public Food(int id, Vector2 position) {
+		super(id, position);
 		setSize(60f,60f);
 		// TODO Auto-generated constructor stub
 	}
