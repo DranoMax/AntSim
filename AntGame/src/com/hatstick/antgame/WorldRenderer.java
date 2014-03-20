@@ -151,6 +151,10 @@ public class WorldRenderer {
 						new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x)) && ant.getFood() == 0) {
 					ant.takeFood(food);
 					ant.setState(State.GATHERING);
+					// This is used to set a random point within the food circle (used to fix an error involving
+					// ants not 'reaching' circle on subsequent visits.
+					ant.setDestination(new Vector2((float) ((food.getPosition().x-food.getSize().x/4)+((food.getSize().x/2)*Math.random())),
+							(float) ((food.getPosition().y-food.getSize().y/4)+((food.getSize().y/2)*Math.random()))));
 				}
 			}
 			for( Anthill hill : level.getAnthills().keySet() ) {
@@ -164,7 +168,7 @@ public class WorldRenderer {
 
 			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
 			// Note: right now the antImage size is scaled by a factor of 5 - purely
-			// based on trial and error for looks.  Needs to be died somehow to screen
+			// based on trial and error for looks.  Needs to be tied somehow to screen
 			// size in case I decide to change it again.
 			antImage.setSize(ant.getSize().x*5,ant.getSize().y*5);
 			antImage.setOrigin(ant.getSize().x*5/2, ant.getSize().y*5/2);

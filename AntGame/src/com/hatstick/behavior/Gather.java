@@ -21,7 +21,7 @@ public class Gather implements MovementBehavior {
 		 */
 		if (currentNode == null) {
 			currentNode = path.getLast();
-			currentNode.setPos(position);
+			currentNode.setPos(destination);
 			path.getMap().put(currentNode, State.GATHERING);
 			goingHome = true;
 		}
