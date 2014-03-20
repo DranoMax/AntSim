@@ -34,6 +34,8 @@ public class WorldRenderer {
 	private Sprite antImage;
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
+	
+	private Food foodToDelete;
 
 	private BitmapFont font;
 
@@ -147,7 +149,11 @@ public class WorldRenderer {
 		for( Ant ant : level.getAnts().keySet() ) {
 
 			for( Food food : level.getFood().keySet() ) {
-				if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
+				// Check if food has run out
+				if( food.getStockpile() <= 0) {
+					foodToDelete = food;
+				}
+				else if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
 						new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x)) && ant.getFood() == 0) {
 					ant.takeFood(food);
 					ant.setState(State.GATHERING);
@@ -156,6 +162,11 @@ public class WorldRenderer {
 					ant.setDestination(new Vector2((float) ((food.getPosition().x-food.getSize().x/4)+((food.getSize().x/2)*Math.random())),
 							(float) ((food.getPosition().y-food.getSize().y/4)+((food.getSize().y/2)*Math.random()))));
 				}
+			}
+			// Delete the depleted food source
+			if( foodToDelete != null ) {
+				level.getFood().remove(foodToDelete);
+				foodToDelete = null;
 			}
 			for( Anthill hill : level.getAnthills().keySet() ) {
 				if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
