@@ -4,7 +4,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.Gather;
 import com.hatstick.behavior.GoToLocation;
-import com.hatstick.behavior.Wander;
+import com.hatstick.behavior.Search;
 import com.hatstick.entity.PathNode;
 import com.hatstick.interfaces.State;
 
@@ -12,7 +12,7 @@ public class Ant extends MovingEntity {
 
 	private PathList path = new PathList();
 
-	private Wander wander = new Wander();
+	private Search search = new Search();
 	private Gather gather = new Gather();
 	private GoToLocation gtLocation = new GoToLocation();
 
@@ -40,16 +40,15 @@ public class Ant extends MovingEntity {
 	public void performMove() {
 		switch(this.getState()) {
 		case SEARCHING:
-			setMoveBehavior(wander);
-			setTarget(getMoveBehavior().move(getPosition(), getDestination(), path, getSpeed()));
+			setMoveBehavior(search);
 			break;
 		case GATHERING:
 			setMoveBehavior(gather);
-			setTarget(getMoveBehavior().move(getPosition(), getDestination(), path, getSpeed()));
 			break;
 		case IDLE: 
 			break;	
 		}
+		setTarget(getMoveBehavior().move(getPosition(), getDestination(), path, getSpeed()));
 	}
 
 	public double vectorDistance(Vector2 a, Vector2 b) {

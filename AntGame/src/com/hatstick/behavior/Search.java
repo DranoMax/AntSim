@@ -7,7 +7,7 @@ import com.hatstick.entity.PathNode;
 import com.hatstick.interfaces.MovementBehavior;
 import com.hatstick.interfaces.State;
 
-public class Wander implements MovementBehavior {
+public class Search implements MovementBehavior {
 
 	private static float WAIT_TIME = 1f;
 	private float time = 6f;
