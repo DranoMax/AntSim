@@ -88,8 +88,11 @@ public class Ant extends MovingEntity implements Observer {
 
 	@Override
 	public void update(Entity entity) {
+		setState(State.SEARCHING);
+		// Food source has been depleted
 		if (entity instanceof Food) {
 			System.out.println("Food depleted");
+			setState(State.SEARCHING);
 		}
 	}
 }
