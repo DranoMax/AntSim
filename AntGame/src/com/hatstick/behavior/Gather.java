@@ -57,4 +57,11 @@ public class Gather implements MovementBehavior {
 		return goToLocation.move(position, destination, path, speed);
 	}
 
+	/**
+	 * Returns current node
+	 * @return
+	 */
+	public PathNode getCurrentNode() {
+		return currentNode;
+	}
 }
