@@ -29,7 +29,6 @@ public class Search implements MovementBehavior {
 			time -= WAIT_TIME;
 			WAIT_TIME = (float) Math.random()*3;
 		}
-		goToLocation.move(position, destination, path, speed);
 		
 		return goToLocation.move(position, destination, path, speed);
 	}

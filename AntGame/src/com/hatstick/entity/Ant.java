@@ -1,14 +1,16 @@
 package com.hatstick.entity;
 
 import java.util.HashMap;
+
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.Gather;
 import com.hatstick.behavior.GoToLocation;
 import com.hatstick.behavior.Search;
 import com.hatstick.entity.PathNode;
+import com.hatstick.interfaces.Observer;
 import com.hatstick.interfaces.State;
 
-public class Ant extends MovingEntity {
+public class Ant extends MovingEntity implements Observer {
 
 	private PathList path = new PathList();
 
@@ -82,5 +84,12 @@ public class Ant extends MovingEntity {
 
 	public void setFood(double food) {
 		this.food = food;
+	}
+
+	@Override
+	public void update(Entity entity) {
+		if (entity instanceof Food) {
+			System.out.println("Food depleted");
+		}
 	}
 }

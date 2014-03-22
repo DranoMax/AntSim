@@ -1,5 +1,7 @@
 package com.hatstick.antgame;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -34,8 +36,8 @@ public class WorldRenderer {
 	private Sprite antImage;
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
-	
-	private Food foodToDelete;
+
+	private ArrayList<Food> foodToDelete = new ArrayList<Food>();
 
 	private BitmapFont font;
 
@@ -90,7 +92,7 @@ public class WorldRenderer {
 
 		for (PathNode node : ant.getPath().getMap().keySet()) {
 			if (ant.getPath().getMap().get(node) == State.GATHERING && (node.getId() == 0 || node.getId() == ant.getPath().size()-1)) {
-				
+
 				shapeRenderer.setColor(Color.RED);
 				shapeRenderer.circle(node.getPos().x, node.getPos().y,4f);
 			}
@@ -150,11 +152,12 @@ public class WorldRenderer {
 
 			for( Food food : level.getFood().keySet() ) {
 				// Check if food has run out
-				if( food.getStockpile() <= 0) {
-					foodToDelete = food;
+				if( food.getStockpile() <= 0 && !foodToDelete.contains(food)) {
+					foodToDelete.add(food);
 				}
 				else if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
 						new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x)) && ant.getFood() == 0) {
+					food.registerObserver(ant);
 					ant.takeFood(food);
 					ant.setState(State.GATHERING);
 					// This is used to set a random point within the food circle (used to fix an error involving
@@ -164,9 +167,13 @@ public class WorldRenderer {
 				}
 			}
 			// Delete the depleted food source
-			if( foodToDelete != null ) {
-				level.getFood().remove(foodToDelete);
-				foodToDelete = null;
+			if( !foodToDelete.isEmpty() ) {
+				for (Food food : foodToDelete) {
+					// Let ants who know about this food source know that's it's empty
+					food.notifyObservers();
+					level.getFood().remove(food);
+				}
+				foodToDelete.clear();
 			}
 			for( Anthill hill : level.getAnthills().keySet() ) {
 				if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
