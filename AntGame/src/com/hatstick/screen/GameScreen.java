@@ -81,7 +81,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	@Override
 	public boolean scrolled(int amount) {
 		renderer.setZoom(amount);
-		return false;
+		return true;
 	}
 
 	@Override
@@ -155,8 +155,14 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean zoom(float initialDistance, float distance) {
-		renderer.setZoom(initialDistance/distance);
-		return true;
+		float temp = 0;
+		if (distance-initialDistance < 0)
+			temp = -0.5f;
+		else {
+			temp = 0.5f;
+		}
+		renderer.setZoom(temp);
+		return false;
 	}
 
 	@Override

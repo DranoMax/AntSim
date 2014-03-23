@@ -26,7 +26,7 @@ public class WorldRenderer {
 
 	// Mouse touch
 	private Vector2 target;
-	
+
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
@@ -49,9 +49,12 @@ public class WorldRenderer {
 	}
 
 	public void setZoom(float i) {
-		cam.zoom += i*0.05f;
+		// Check that we don't zoom too close!
+		if (cam.zoom + i*0.05f >= 0.2) {
+			cam.zoom += i*0.05f;
+		}
 	}
-	
+
 	/**
 	 * Used by GameScreen to move the camera
 	 */
@@ -129,7 +132,7 @@ public class WorldRenderer {
 		}
 		spriteBatch.end();
 		shapeRenderer.end();
-		
+
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		spriteBatch.setProjectionMatrix(cam.combined);
