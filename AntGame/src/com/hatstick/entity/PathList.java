@@ -12,28 +12,34 @@ import com.hatstick.interfaces.State;
 public class PathList {
 	
 	private PathNode head;
+	private PathNode tail;
+	private PathNode temp;
+	
 	private int size;
 
 	private HashMap<PathNode,State> map;
 	
 	public PathList() {
 		head = null;
+		tail = null;
+		temp = null;
 		size = 0;
 		setMap(new HashMap<PathNode,State>());
 	}
 	
 	public void insert(PathNode node, State state) {
 		if (head == null) {
-			head = node;
+			head = tail = node;
+			head.setNext(tail);
+			tail.setPrev(head);
 			map.put(head, state);
-			size++;
-			return;
-		}
-
-		PathNode temp = getLast();
-		temp.setNext(node);
-		node.setPrev(temp);
+		} 
+		else {
+		tail.setNext(node);
+		node.setPrev(tail);
+		tail = tail.getNext();
 		map.put(node, state);
+		}
 		size++;
 	}
 	
@@ -41,12 +47,8 @@ public class PathList {
 		return head;
 	}
 	
-	public PathNode getLast() {
-		PathNode temp = head;
-		while(temp.getNext() != null) {
-			temp = temp.getNext();
-		}
-		return temp;
+	public PathNode getTail() {
+		return tail;
 	}
 	
 	public int size() {

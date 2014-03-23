@@ -2,6 +2,11 @@ package com.hatstick.entity;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.interfaces.Observable;
 import com.hatstick.interfaces.Observer;
@@ -14,11 +19,13 @@ public class Food extends Entity implements Observable {
 	 */
 	private ArrayList observers = new ArrayList();
 	private double stockpile = 100;
+	
+	private BitmapFont font;
 
 	public Food(int id, Vector2 position) {
 		super(id, position);
 		setSize(60f,60f);
-		// TODO Auto-generated constructor stub
+		font = new BitmapFont();
 	}
 
 	public double takeFood(double amount) {
@@ -62,5 +69,18 @@ public class Food extends Entity implements Observable {
 			Observer observer = (Observer)observers.get(i);
 			observer.update(this);
 		}
+	}
+
+	@Override
+	public void draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+		
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.circle(getPosition().x, getPosition().y, getSize().x);
+	
+		// Draw our food levels
+		font.setScale(1.5f);
+		font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+		font.draw(spriteBatch, getStockpile()+"", getPosition().x, 
+				getPosition().y);
 	}
 }

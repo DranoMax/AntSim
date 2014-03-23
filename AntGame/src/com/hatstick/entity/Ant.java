@@ -2,6 +2,11 @@ package com.hatstick.entity;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.Gather;
 import com.hatstick.behavior.GoToLocation;
@@ -23,6 +28,8 @@ public class Ant extends MovingEntity implements Observer {
 	/** Ants only know what they know (No hive mind) */
 	private HashMap<Anthill, Integer> knownHills = new HashMap<Anthill,Integer>();
 
+	private Sprite antImage;
+
 	// Ants will seek out food, once they have food,
 	// they will seek out their anthill
 
@@ -33,9 +40,14 @@ public class Ant extends MovingEntity implements Observer {
 		super(id, position);
 		setSize(5f,5f);
 		setSpeed(100f);
-	//	knownHills.put(new Anthill(position), 1);
+		//	knownHills.put(new Anthill(position), 1);
 		path.insert(new PathNode(path.size(),getPosition()), State.SEARCHING);
 		setState(State.SEARCHING);
+
+		// binding texture to sprite and setting some attributes
+		// loading a texture from image file
+		Texture.setEnforcePotImages(false);
+		antImage = new Sprite(new Texture(Gdx.files.internal("data/ant.png")));
 	}
 
 	@Override
@@ -91,8 +103,20 @@ public class Ant extends MovingEntity implements Observer {
 		setState(State.SEARCHING);
 		// Food source has been depleted
 		if (entity instanceof Food) {
-			System.out.println("Food depleted");
 			setState(State.SEARCHING);
 		}
+	}
+
+	@Override
+	public void draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+		antImage.setPosition(getPosition().x, getPosition().y);
+		// Note: right now the antImage size is scaled by a factor of 5 - purely
+		// based on trial and error for looks.  Needs to be tied somehow to screen
+		// size in case I decide to change it again.
+		antImage.setSize(getSize().x*5,getSize().y*5);
+		antImage.setOrigin(getSize().x*5/2, getSize().y*5/2);
+		antImage.setRotation(getTarget());
+
+		antImage.draw(spriteBatch);
 	}
 }

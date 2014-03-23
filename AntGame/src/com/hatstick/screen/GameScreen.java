@@ -15,7 +15,6 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-
 		Gdx.input.setInputProcessor(this);
 		renderer = new WorldRenderer(level = new Level());
 	}
@@ -92,7 +91,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		renderer.setTouch(screenX, screenY);
+	//	renderer.setTouch(screenX, screenY);
 		return false;
 	}
 
@@ -104,7 +103,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		renderer.setTouch(screenX, screenY);
+	//	renderer.setTouch(screenX, screenY);
 		return false;
 	}
 }

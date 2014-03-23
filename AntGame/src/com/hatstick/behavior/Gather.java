@@ -20,7 +20,7 @@ public class Gather implements MovementBehavior {
 		 * Found the end of path to food
 		 */
 		if (currentNode == null) {
-			currentNode = path.getLast();
+			currentNode = path.getTail();
 			currentNode.setPos(destination);
 			path.getMap().put(currentNode, State.GATHERING);
 			goingHome = true;

@@ -1,5 +1,7 @@
 package com.hatstick.entity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.GoToLocation;
@@ -23,6 +25,11 @@ public abstract class Entity {
 		boundingCircle.y = position.y;
 		boundingCircle.radius = 50;
 	}
+	
+	/**
+	 * Called by WorldRenderer to draw the Entity described by subclass
+	 */
+	public abstract void draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer);
 
 	// Begin massive list of setters/getters ***********************************
 	

@@ -21,7 +21,6 @@ import com.hatstick.entity.Anthill;
 import com.hatstick.interfaces.State;
 import com.hatstick.entity.Food;
 import com.hatstick.entity.Level;
-import com.hatstick.entity.PathList;
 import com.hatstick.entity.PathNode;
 
 public class WorldRenderer {
@@ -32,14 +31,11 @@ public class WorldRenderer {
 
 	// Mouse touch
 	private Vector2 target;
-
-	private Sprite antImage;
+	
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
 	private ArrayList<Food> foodToDelete = new ArrayList<Food>();
-
-	private BitmapFont font;
 
 	private Level level;
 
@@ -53,14 +49,8 @@ public class WorldRenderer {
 	}
 
 	private void loadTextures() {
-		// loading a texture from image file
-		Texture.setEnforcePotImages(false);
-		// binding texture to sprite and setting some attributes
-		antImage = new Sprite(new Texture(Gdx.files.internal("data/ant.png")));
 		spriteBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
-
-		font = new BitmapFont();
 	}
 
 	public void setZoom(float i) {
@@ -83,6 +73,21 @@ public class WorldRenderer {
 			angle = 360-angle;
 			//	ant.setTarget(angle);
 			//	ant.setDestination(target);
+		}
+	}
+
+	private void drawLines(Ant ant) {
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+
+		PathNode head = ant.getPath().getHead();
+		if (ant.getPath().size() != 0) {
+			while (head.getNext() != null) {
+				shapeRenderer.line(head.getPos(), head.getNext().getPos());
+				head = head.getNext();
+			}
+			shapeRenderer.line(head.getPos(), ant.getPosition());
+			shapeRenderer.end();
 		}
 	}
 
@@ -117,36 +122,20 @@ public class WorldRenderer {
 
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-
+		spriteBatch.begin();
 		for( Food food : level.getFood().keySet() ) {
-			shapeRenderer.circle(food.getPosition().x, food.getPosition().y, food.getSize().x);
-
-			// Draw our food levels
-			spriteBatch.begin();
-			font.setScale(1.5f);
-			font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-			font.draw(spriteBatch, food.getStockpile()+"", food.getPosition().x, 
-					food.getPosition().y);
-			spriteBatch.end();
+			food.draw(spriteBatch, shapeRenderer);
 		}
-		shapeRenderer.setColor(Color.BLACK);
+
 		for( Anthill hill : level.getAnthills().keySet() ) {
-			shapeRenderer.circle(hill.getPosition().x, hill.getPosition().y, hill.getSize().x);
-
-			// Draw our food levels
-			spriteBatch.begin();
-			font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
-			font.draw(spriteBatch, hill.getFoodStores()+"", hill.getPosition().x, 
-					hill.getPosition().y);
-			spriteBatch.end();
+			hill.draw(spriteBatch, shapeRenderer);
 		}
+		spriteBatch.end();
 		shapeRenderer.end();
-
+		
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		spriteBatch.setProjectionMatrix(cam.combined);
-
 
 		for( Ant ant : level.getAnts().keySet() ) {
 
@@ -182,18 +171,11 @@ public class WorldRenderer {
 				}
 			}
 			ant.performMove();
+			drawLines(ant);
 			drawNodes(ant);
 
-			antImage.setPosition(ant.getPosition().x, ant.getPosition().y);
-			// Note: right now the antImage size is scaled by a factor of 5 - purely
-			// based on trial and error for looks.  Needs to be tied somehow to screen
-			// size in case I decide to change it again.
-			antImage.setSize(ant.getSize().x*5,ant.getSize().y*5);
-			antImage.setOrigin(ant.getSize().x*5/2, ant.getSize().y*5/2);
-			antImage.setRotation(ant.getTarget());
 			spriteBatch.begin();
-
-			antImage.draw(spriteBatch);
+			ant.draw(spriteBatch, shapeRenderer);
 			spriteBatch.end();
 		}
 	}
