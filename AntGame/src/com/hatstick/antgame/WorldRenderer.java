@@ -2,13 +2,8 @@ package com.hatstick.antgame;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -55,9 +50,14 @@ public class WorldRenderer {
 
 	public void setZoom(float i) {
 		cam.zoom += i*0.05f;
-
-		cam.position.x += i/(Gdx.graphics.getWidth()/CAMERA_WIDTH*0.05f);
-		cam.position.y += i/(Gdx.graphics.getHeight()/CAMERA_HEIGHT*0.05f);
+	}
+	
+	/**
+	 * Used by GameScreen to move the camera
+	 */
+	public void setTranslation(Vector2 trans) {
+		Vector3 temp = new Vector3(trans.x,trans.y,0);
+		cam.translate(temp);
 	}
 
 	public void setTouch(float x, float y) {
@@ -113,9 +113,6 @@ public class WorldRenderer {
 	}
 
 	public void render() {
-		// clear the screen with white.
-		Gdx.gl.glClearColor(1,1,1,1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// tell the camera to update its matrices.
 		cam.update();

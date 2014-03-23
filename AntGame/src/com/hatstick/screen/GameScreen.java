@@ -1,27 +1,34 @@
 package com.hatstick.screen;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.InputProcessor;
 import com.hatstick.antgame.WorldRenderer;
 import com.hatstick.entity.Level;
 
 
-public class GameScreen implements Screen, InputProcessor {
+public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	private WorldRenderer 	renderer;
 	private int width, height;
 	private Level level;
+	
+	private Vector2 initialTouch = new Vector2();
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(this);
+		Gdx.input.setInputProcessor(new GestureDetector(this));
 		renderer = new WorldRenderer(level = new Level());
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+		// clear the screen with white.
+		Gdx.gl.glClearColor(1,1,1,1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		renderer.render();
 	}
@@ -56,8 +63,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-	
-		return true;
+
+		return false;
 	}
 
 	@Override
@@ -66,7 +73,7 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
-	
+
 	public boolean touchMoved(int x, int y) {
 		return false;
 	}
@@ -91,7 +98,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-	//	renderer.setTouch(screenX, screenY);
+		initialTouch.set(screenX,screenY);
+		//	renderer.setTouch(screenX, screenY);
 		return false;
 	}
 
@@ -103,7 +111,58 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-	//	renderer.setTouch(screenX, screenY);
+		//	renderer.setTouch(screenX, screenY);
+		//renderer.setTranslation(initialTouch.sub(screenX,screenY));
+	//	initialTouch.set(screenX,screenY);
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(float x, float y, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean tap(float x, float y, int count, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean longPress(float x, float y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean fling(float velocityX, float velocityY, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		renderer.setTranslation(new Vector2 (-deltaX,deltaY));
+		return true;
+	}
+
+	@Override
+	public boolean panStop(float x, float y, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean zoom(float initialDistance, float distance) {
+		renderer.setZoom(initialDistance/distance);
+		return true;
+	}
+
+	@Override
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
+			Vector2 pointer1, Vector2 pointer2) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 }
