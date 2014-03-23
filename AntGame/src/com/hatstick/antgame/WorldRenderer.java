@@ -84,7 +84,8 @@ public class WorldRenderer {
 		shapeRenderer.setColor(Color.BLUE);
 
 		PathNode head = ant.getPath().getHead();
-		if (ant.getPath().size() != 0) {
+		if (ant.getPath().size() != 0 && head.getNext() != null) {
+			head = head.getNext();
 			while (head.getNext() != null) {
 				shapeRenderer.line(head.getPos(), head.getNext().getPos());
 				head = head.getNext();
