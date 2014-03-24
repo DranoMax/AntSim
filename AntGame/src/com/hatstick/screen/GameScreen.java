@@ -17,8 +17,6 @@ import com.hatstick.entity.Level;
 public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	private WorldRenderer 	renderer;
-	private int width, height;
-	private Level level;
 	
 	private InputMultiplexer multi = new InputMultiplexer();
 	
@@ -34,7 +32,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 		multi.addProcessor(new GestureDetector(this));
 		multi.addProcessor(new InputMultiplexer(this));
 		Gdx.input.setInputProcessor(multi);
-		renderer = new WorldRenderer(level = new Level());
+		renderer = new WorldRenderer(new Level());
 	}
 
 	@Override
@@ -47,8 +45,6 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public void resize(int width, int height) {
-		this.width = width;
-		this.height = height;
 	}
 
 	@Override

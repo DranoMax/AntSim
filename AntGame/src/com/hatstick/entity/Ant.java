@@ -1,12 +1,12 @@
 package com.hatstick.entity;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.Gather;
 import com.hatstick.behavior.GoToLocation;
@@ -26,9 +26,6 @@ public class Ant extends MovingEntity implements Observer {
 	private Idle idle = new Idle();
 
 	Anthill closestHill = null;
-
-	/** Ants only know what they know (No hive mind) */
-	private HashMap<Anthill, Integer> knownHills = new HashMap<Anthill,Integer>();
 
 	private Sprite antImage;
 
@@ -125,5 +122,42 @@ public class Ant extends MovingEntity implements Observer {
 		antImage.setRotation(getTarget());
 
 		antImage.draw(spriteBatch);
+	}
+	
+	public void drawLines(ShapeRenderer shapeRenderer) {
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.BLUE);
+
+		PathNode head = getPath().getHead();
+		if (getPath().size() != 0 && head.getNext() != null) {
+			head = head.getNext();
+			while (head.getNext() != null) {
+				shapeRenderer.line(head.getPos(), head.getNext().getPos());
+				head = head.getNext();
+			}
+			shapeRenderer.line(head.getPos(), getPosition());
+			shapeRenderer.end();
+		}
+	}
+	
+	public void drawNodes(ShapeRenderer shapeRenderer) {
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.ORANGE);
+
+		for (PathNode node : getPath().getMap().keySet()) {
+			if (getPath().getMap().get(node) == State.GATHERING && (node.getId() == 0 || node.getId() == getPath().size()-1)) {
+
+				shapeRenderer.setColor(Color.RED);
+				shapeRenderer.circle(node.getPos().x, node.getPos().y,4f);
+			}
+			else if (getPath().getMap().get(node) == State.GATHERING) {
+				shapeRenderer.setColor(Color.ORANGE);
+			}
+			else {
+				shapeRenderer.setColor(Color.BLUE);
+			}
+			shapeRenderer.circle(node.getPos().x, node.getPos().y,2f);
+		}
+		shapeRenderer.end();
 	}
 }

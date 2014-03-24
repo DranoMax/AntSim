@@ -1,8 +1,6 @@
 package com.hatstick.antgame;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -16,7 +14,6 @@ import com.hatstick.entity.Anthill;
 import com.hatstick.interfaces.State;
 import com.hatstick.entity.Food;
 import com.hatstick.entity.Level;
-import com.hatstick.entity.PathNode;
 
 public class WorldRenderer {
 
@@ -111,43 +108,6 @@ public class WorldRenderer {
 		}
 	}
 
-	private void drawLines(Ant ant) {
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.BLUE);
-
-		PathNode head = ant.getPath().getHead();
-		if (ant.getPath().size() != 0 && head.getNext() != null) {
-			head = head.getNext();
-			while (head.getNext() != null) {
-				shapeRenderer.line(head.getPos(), head.getNext().getPos());
-				head = head.getNext();
-			}
-			shapeRenderer.line(head.getPos(), ant.getPosition());
-			shapeRenderer.end();
-		}
-	}
-
-	private void drawNodes(Ant ant) {
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.ORANGE);
-
-		for (PathNode node : ant.getPath().getMap().keySet()) {
-			if (ant.getPath().getMap().get(node) == State.GATHERING && (node.getId() == 0 || node.getId() == ant.getPath().size()-1)) {
-
-				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.circle(node.getPos().x, node.getPos().y,4f);
-			}
-			else if (ant.getPath().getMap().get(node) == State.GATHERING) {
-				shapeRenderer.setColor(Color.ORANGE);
-			}
-			else {
-				shapeRenderer.setColor(Color.BLUE);
-			}
-			shapeRenderer.circle(node.getPos().x, node.getPos().y,2f);
-		}
-		shapeRenderer.end();
-	}
-
 	public void render() {
 
 		// tell the camera to update its matrices.
@@ -208,9 +168,10 @@ public class WorldRenderer {
 					ant.putFood(hill);
 				}
 			}
+			
 			ant.performMove();
-			drawLines(ant);
-			drawNodes(ant);
+			ant.drawNodes(shapeRenderer);
+			ant.drawLines(shapeRenderer);
 
 			spriteBatch.begin();
 			ant.draw(spriteBatch, shapeRenderer);
