@@ -22,7 +22,7 @@ public class Food extends Entity implements Observable {
 	private BitmapFont font;
 
 	public Food(int id, Vector2 position) {
-		super(id, position);
+		super(id, position, 60f);
 		setSize(60f,60f);
 		font = new BitmapFont();
 	}

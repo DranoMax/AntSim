@@ -16,12 +16,12 @@ public abstract class Entity {
 	
 	private int id;
 	
-	public Entity(int id, Vector2 position) {
+	public Entity(int id, Vector2 position, float size) {
 		this.position = position;
 		this.id = id;
 		boundingCircle.x = position.x + getSize().x/2;
 		boundingCircle.y = position.y;
-		boundingCircle.radius = 50;
+		boundingCircle.radius = size/2;
 	}
 	
 	/**
@@ -46,6 +46,8 @@ public abstract class Entity {
 
 	public void setPosition(Vector2 position2) {
 		position = position2;
+		boundingCircle.x = position.x+getSize().x/2;
+		boundingCircle.y = position.y+getSize().y;
 	}
 	
 	public void setSize(float width, float height) {

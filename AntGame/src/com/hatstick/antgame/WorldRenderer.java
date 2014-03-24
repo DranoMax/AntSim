@@ -1,7 +1,7 @@
 package com.hatstick.antgame;
 
 import java.util.ArrayList;
-
+import java.util.Map.Entry;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +26,12 @@ public class WorldRenderer {
 
 	// Mouse touch
 	private Vector2 target;
-
+	
+	// Ant that camera is following
+	Ant followingAnt = null;
+	// isZooming used after selecting an ant in order to "zoom" smoothly up to it
+	private boolean isZooming = false;
+	
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
@@ -47,11 +52,38 @@ public class WorldRenderer {
 		spriteBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 	}
+	
+	public OrthographicCamera getCam() {
+		return cam;
+	}
 
 	public void setZoom(float i) {
 		// Check that we don't zoom too close!
 		if (cam.zoom + i*0.05f >= 0.2) {
 			cam.zoom += i*0.05f;
+		}
+	}
+	
+	public void selectAnt(Circle touch) {
+		for (Ant ant : level.getAnts().keySet()) {
+			if (Intersector.overlaps(ant.getBoundingCircle(),touch)) {
+				isZooming = true;
+				setFollowingAnt(ant);
+				break;
+			}
+		}
+	}
+	
+	public void setFollowingAnt(Ant ant) {
+		followingAnt = ant;
+	}
+	
+	public void smoothZoom() {
+		if (cam.zoom-0.05f > 0.3f) {
+			cam.zoom -= 0.05f;
+		}
+		else {
+			isZooming = false;
 		}
 	}
 
@@ -120,6 +152,11 @@ public class WorldRenderer {
 
 		// tell the camera to update its matrices.
 		cam.update();
+		
+		if (followingAnt != null) {
+			smoothZoom();
+			cam.position.set(followingAnt.getPosition().x,followingAnt.getPosition().y,0);
+		}
 
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);

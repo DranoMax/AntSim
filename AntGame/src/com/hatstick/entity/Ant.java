@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.Gather;
 import com.hatstick.behavior.GoToLocation;
+import com.hatstick.behavior.Idle;
 import com.hatstick.behavior.Search;
 import com.hatstick.entity.PathNode;
 import com.hatstick.interfaces.Observer;
@@ -22,6 +23,7 @@ public class Ant extends MovingEntity implements Observer {
 	private Search search = new Search();
 	private Gather gather = new Gather();
 	private GoToLocation gtLocation = new GoToLocation();
+	private Idle idle = new Idle();
 
 	Anthill closestHill = null;
 
@@ -37,7 +39,7 @@ public class Ant extends MovingEntity implements Observer {
 	private double food = 0;
 
 	public Ant(int id, Vector2 position) {
-		super(id, position);
+		super(id, position,5f);
 		setSize(5f,5f);
 		setSpeed(100f);
 		//	knownHills.put(new Anthill(position), 1);
@@ -60,9 +62,14 @@ public class Ant extends MovingEntity implements Observer {
 			setMoveBehavior(gather);
 			break;
 		case IDLE: 
+			setMoveBehavior(idle);
 			break;	
 		}
 		setTarget(getMoveBehavior().move(getPosition(), getDestination(), path, getSpeed()));
+		// Note that we call setPosition to update boundingCircle's we have to do this manually
+		// even though nothing is changing because of how we are updating position via addition
+		// in our moveBehaviors
+		setPosition(getPosition());
 	}
 
 	public double vectorDistance(Vector2 a, Vector2 b) {
@@ -109,7 +116,7 @@ public class Ant extends MovingEntity implements Observer {
 
 	@Override
 	public void draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
-		antImage.setPosition(getPosition().x, getPosition().y);
+		antImage.setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
 		// Note: right now the antImage size is scaled by a factor of 5 - purely
 		// based on trial and error for looks.  Needs to be tied somehow to screen
 		// size in case I decide to change it again.

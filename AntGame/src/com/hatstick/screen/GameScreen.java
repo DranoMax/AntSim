@@ -6,7 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.InputProcessor;
 import com.hatstick.antgame.WorldRenderer;
 import com.hatstick.entity.Level;
@@ -21,6 +23,11 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	private InputMultiplexer multi = new InputMultiplexer();
 	
 	private Vector2 initialTouch = new Vector2();
+	
+	/**
+	 * touchCircle used for determining touches.
+	 */
+	private Circle touchCircle = new Circle(0,0,20);
 
 	@Override
 	public void show() {
@@ -130,7 +137,16 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
-		// TODO Auto-generated method stub
+		// Stop following ant
+		renderer.setFollowingAnt(null);
+		
+		// Unproject our values from Screen to world values
+		Vector3 temp = new Vector3(x,y,0);
+		renderer.getCam().unproject(temp);
+		touchCircle.setPosition(temp.x,temp.y);
+		// See if we've selected an ant
+		renderer.selectAnt(touchCircle);
+		
 		return false;
 	}
 
@@ -160,7 +176,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean zoom(float initialDistance, float distance) {
-		renderer.setZoom((distance-initialDistance)*.01f);
+		renderer.setZoom((initialDistance-distance)*.01f);
 		return false;
 	}
 

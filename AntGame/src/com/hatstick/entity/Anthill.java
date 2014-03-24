@@ -14,7 +14,7 @@ public class Anthill extends Entity {
 	private BitmapFont font;
 
 	public Anthill(int id, Vector2 position) {
-		super(id, position);
+		super(id, position,60f);
 		setSize(60f,60f);
 		font = new BitmapFont();
 	}
