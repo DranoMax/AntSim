@@ -160,13 +160,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean zoom(float initialDistance, float distance) {
-		float temp = 0;
-		if (distance-initialDistance < 0)
-			temp = -0.5f;
-		else {
-			temp = 0.5f;
-		}
-		renderer.setZoom(temp);
+		renderer.setZoom((distance-initialDistance)*.01f);
 		return false;
 	}
 
