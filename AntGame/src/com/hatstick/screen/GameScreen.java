@@ -1,6 +1,7 @@
 package com.hatstick.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.input.GestureDetector;
@@ -17,11 +18,15 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	private int width, height;
 	private Level level;
 	
+	private InputMultiplexer multi = new InputMultiplexer();
+	
 	private Vector2 initialTouch = new Vector2();
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(new GestureDetector(this));
+		multi.addProcessor(new GestureDetector(this));
+		multi.addProcessor(new InputMultiplexer(this));
+		Gdx.input.setInputProcessor(multi);
 		renderer = new WorldRenderer(level = new Level());
 	}
 
