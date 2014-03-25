@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.behavior.Gather;
 import com.hatstick.behavior.GoToLocation;
@@ -110,6 +112,38 @@ public class Ant extends MovingEntity implements Observer {
 			setState(State.SEARCHING);
 		}
 	}
+	
+	/**
+	 * Used to determine if ant is inside a food source - if so, the ant begins gathering
+	 * @param food
+	 */
+	public void checkIfInsideFood(Food food) {
+		if( Intersector.overlaps(new Circle(getPosition().x, getPosition().y, getSize().x/2),
+				new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x)) && getFood() == 0) {
+			food.registerObserver(this);
+			takeFood(food);
+			setState(State.GATHERING);
+			// This is used to set a random point within the food circle (used to fix an error involving
+			// ants not 'reaching' circle on subsequent visits.
+			setDestination(new Vector2((float) ((food.getPosition().x-food.getSize().x/4)+((food.getSize().x/2)*Math.random())),
+					(float) ((food.getPosition().y-food.getSize().y/4)+((food.getSize().y/2)*Math.random()))));
+		}
+	}
+	
+	/**
+	 * Used to determine if ant is inside anthill - if so, drop off food if carrying
+	 * @param hill
+	 */
+	public void checkIfInsideAnthill(Anthill hill) {
+		if( Intersector.overlaps(new Circle(getPosition().x, getPosition().y, getSize().x/2),
+				new Circle(hill.getPosition().x, hill.getPosition().y, hill.getSize().x)) && getFood() > 0) {
+			putFood(hill);
+		}
+	}
+	
+	/**
+	 * Below contains the methods called by WorldRenderer used for drawing
+	 */
 
 	@Override
 	public void draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {

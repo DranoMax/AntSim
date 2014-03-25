@@ -23,12 +23,12 @@ public class WorldRenderer {
 
 	// Mouse touch
 	private Vector2 target;
-	
+
 	// Ant that camera is following
 	Ant followingAnt = null;
 	// isZooming used after selecting an ant in order to "zoom" smoothly up to it
 	private boolean isZooming = false;
-	
+
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
@@ -49,7 +49,7 @@ public class WorldRenderer {
 		spriteBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 	}
-	
+
 	public OrthographicCamera getCam() {
 		return cam;
 	}
@@ -60,7 +60,7 @@ public class WorldRenderer {
 			cam.zoom += i*0.05f;
 		}
 	}
-	
+
 	public void selectAnt(Circle touch) {
 		for (Ant ant : level.getAnts().keySet()) {
 			if (Intersector.overlaps(ant.getBoundingCircle(),touch)) {
@@ -70,11 +70,11 @@ public class WorldRenderer {
 			}
 		}
 	}
-	
+
 	public void setFollowingAnt(Ant ant) {
 		followingAnt = ant;
 	}
-	
+
 	public void smoothZoom() {
 		if (isZooming == true && cam.zoom-0.05f > 0.3f) {
 			cam.zoom -= 0.05f;
@@ -108,29 +108,7 @@ public class WorldRenderer {
 		}
 	}
 
-	public void render() {
-
-		// tell the camera to update its matrices.
-		cam.update();
-		
-		if (followingAnt != null) {
-			smoothZoom();
-			cam.position.set(followingAnt.getPosition().x,followingAnt.getPosition().y,0);
-		}
-
-		shapeRenderer.setProjectionMatrix(cam.combined);
-		shapeRenderer.begin(ShapeType.Line);
-		spriteBatch.begin();
-		for( Food food : level.getFood().keySet() ) {
-			food.draw(spriteBatch, shapeRenderer);
-		}
-
-		for( Anthill hill : level.getAnthills().keySet() ) {
-			hill.draw(spriteBatch, shapeRenderer);
-		}
-		spriteBatch.end();
-		shapeRenderer.end();
-
+	private void antCalculations() {
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		spriteBatch.setProjectionMatrix(cam.combined);
@@ -138,37 +116,12 @@ public class WorldRenderer {
 		for( Ant ant : level.getAnts().keySet() ) {
 
 			for( Food food : level.getFood().keySet() ) {
-				// Check if food has run out
-				if( food.getStockpile() <= 0 && !foodToDelete.contains(food)) {
-					foodToDelete.add(food);
-				}
-				else if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
-						new Circle(food.getPosition().x, food.getPosition().y, food.getSize().x)) && ant.getFood() == 0) {
-					food.registerObserver(ant);
-					ant.takeFood(food);
-					ant.setState(State.GATHERING);
-					// This is used to set a random point within the food circle (used to fix an error involving
-					// ants not 'reaching' circle on subsequent visits.
-					ant.setDestination(new Vector2((float) ((food.getPosition().x-food.getSize().x/4)+((food.getSize().x/2)*Math.random())),
-							(float) ((food.getPosition().y-food.getSize().y/4)+((food.getSize().y/2)*Math.random()))));
-				}
-			}
-			// Delete the depleted food source
-			if( !foodToDelete.isEmpty() ) {
-				for (Food food : foodToDelete) {
-					// Let ants who know about this food source know that's it's empty
-					food.notifyObservers();
-					level.getFood().remove(food);
-				}
-				foodToDelete.clear();
+				ant.checkIfInsideFood(food);
 			}
 			for( Anthill hill : level.getAnthills().keySet() ) {
-				if( Intersector.overlaps(new Circle(ant.getPosition().x, ant.getPosition().y, ant.getSize().x/2),
-						new Circle(hill.getPosition().x, hill.getPosition().y, hill.getSize().x)) && ant.getFood() > 0) {
-					ant.putFood(hill);
-				}
+				ant.checkIfInsideAnthill(hill);
 			}
-			
+
 			ant.performMove();
 			ant.drawNodes(shapeRenderer);
 			ant.drawLines(shapeRenderer);
@@ -177,5 +130,45 @@ public class WorldRenderer {
 			ant.draw(spriteBatch, shapeRenderer);
 			spriteBatch.end();
 		}
+	}
+
+	public void render() {
+
+		// tell the camera to update its matrices.
+		cam.update();
+
+		if (followingAnt != null) {
+			smoothZoom();
+			cam.position.set(followingAnt.getPosition().x,followingAnt.getPosition().y,0);
+		}
+
+		shapeRenderer.setProjectionMatrix(cam.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		spriteBatch.begin();
+		
+		for( Food food : level.getFood().keySet() ) {
+			// Check if food has run out
+			if( food.getStockpile() <= 0 && !foodToDelete.contains(food)) {
+				foodToDelete.add(food);
+			}
+			food.draw(spriteBatch, shapeRenderer);
+		}
+		// Delete the depleted food source
+		if( !foodToDelete.isEmpty() ) {
+			for (Food food : foodToDelete) {
+				// Let ants who know about this food source know that's it's empty
+				food.notifyObservers();
+				level.getFood().remove(food);
+			}
+			foodToDelete.clear();
+		}
+
+		for( Anthill hill : level.getAnthills().keySet() ) {
+			hill.draw(spriteBatch, shapeRenderer);
+		}
+		spriteBatch.end();
+		shapeRenderer.end();
+
+		antCalculations();
 	}
 }
