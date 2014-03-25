@@ -17,11 +17,12 @@ import com.hatstick.entity.Level;
 public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	private WorldRenderer 	renderer;
-	
+
 	private InputMultiplexer multi = new InputMultiplexer();
-	
+
 	private Vector2 initialTouch = new Vector2();
-	
+	private float prevZoom = 0f;
+
 	/**
 	 * touchCircle used for determining touches.
 	 */
@@ -121,7 +122,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		//	renderer.setTouch(screenX, screenY);
 		//renderer.setTranslation(initialTouch.sub(screenX,screenY));
-	//	initialTouch.set(screenX,screenY);
+		//	initialTouch.set(screenX,screenY);
 		return false;
 	}
 
@@ -135,14 +136,14 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	public boolean tap(float x, float y, int count, int button) {
 		// Stop following ant
 		renderer.setFollowingAnt(null);
-		
+
 		// Unproject our values from Screen to world values
 		Vector3 temp = new Vector3(x,y,0);
 		renderer.getCam().unproject(temp);
 		touchCircle.setPosition(temp.x,temp.y);
 		// See if we've selected an ant
 		renderer.selectAnt(touchCircle);
-		
+
 		return false;
 	}
 
@@ -172,7 +173,11 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean zoom(float initialDistance, float distance) {
-		renderer.setZoom((initialDistance-distance)*.01f);
+		float zoom = initialDistance-distance;
+		if (Math.abs(zoom-prevZoom) > 10f) {
+			prevZoom = zoom;
+			renderer.setZoom((zoom)*.01f);
+		}
 		return false;
 	}
 

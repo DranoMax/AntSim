@@ -76,7 +76,7 @@ public class WorldRenderer {
 	}
 	
 	public void smoothZoom() {
-		if (cam.zoom-0.05f > 0.3f) {
+		if (isZooming == true && cam.zoom-0.05f > 0.3f) {
 			cam.zoom -= 0.05f;
 		}
 		else {
