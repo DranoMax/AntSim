@@ -14,12 +14,12 @@ Features v.0.2.3
 * Ants wander randomly looking for food.
 * When they find food, they return it to their ant hill using a path of nodes.
 * User can zoom/pan across Ant world.
-* 
+
 
 Screenshots
 -----------
-![Screen 1](DranoMax/AntSim/blob/master/Screenshot_2014-03-25-19-17-48.png)
-
+<img src="/Screenshot_2014-03-25-19-18-04.png" width="700px">
+<img src="/Screenshot_2014-03-25-19-18-44.png" width="700px">
 
 Todo
 ----
