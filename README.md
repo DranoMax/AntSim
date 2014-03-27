@@ -13,6 +13,7 @@ Features v.0.2.3
 
 * Ants wander randomly looking for food.
 * When they find food, they return it to their ant hill using a path of nodes.
+* New ants created, costing food from Anthill at regular intervals.
 * User can zoom/pan across Ant world.
 
 
@@ -26,7 +27,8 @@ Todo
 
 * Searching ants should "smell" the trail of other ants that lead to food and then "adopt" their path.
 * Ability to click on ant and follow it - also display facts about ant.
-* Ant hills should create more ants as food is produced AND use more food depending on number of ants alive.  Should eventually run out and "die".
+* Ant hills should use more food depending on number of ants alive.  Should eventually run out and "die".
+* Need to introduce combat ability - maybe a food source that moves and has to be killed before collected.
 * Should include enemy ants that fight with player ants over food.
 
 Contributions
