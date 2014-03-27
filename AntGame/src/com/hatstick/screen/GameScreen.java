@@ -16,7 +16,7 @@ import com.hatstick.entity.Level;
 
 public class GameScreen implements Screen, InputProcessor, GestureListener {
 
-	private WorldRenderer 	renderer;
+	private WorldRenderer renderer;
 
 	private InputMultiplexer multi = new InputMultiplexer();
 
@@ -108,7 +108,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		initialTouch.set(screenX,screenY);
-		//	renderer.setTouch(screenX, screenY);
+		// renderer.setTouch(screenX, screenY);
 		return false;
 	}
 
@@ -120,9 +120,9 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		//	renderer.setTouch(screenX, screenY);
+		// renderer.setTouch(screenX, screenY);
 		//renderer.setTranslation(initialTouch.sub(screenX,screenY));
-		//	initialTouch.set(screenX,screenY);
+		// initialTouch.set(screenX,screenY);
 		return false;
 	}
 

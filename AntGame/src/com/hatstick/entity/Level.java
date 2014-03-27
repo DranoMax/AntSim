@@ -32,16 +32,4 @@ public class Level {
 	public HashMap<Entity, Integer> getEntities() {
 		return entities;
 	}
-
-	public HashMap<Ant, Integer> getAnts() {
-		return antsMap;
-	}
-
-	public HashMap<Anthill, Integer> getAnthills() {
-		return antHillMap;
-	}
-
-	public HashMap<Food, Integer> getFood() {
-		return foodMap;
-	}
 }

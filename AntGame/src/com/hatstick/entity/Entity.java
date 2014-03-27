@@ -30,7 +30,7 @@ public abstract class Entity {
 	 * @return boolean
 	 * If the enitity is to be deleted, returns false, else true.
 	 */
-	public abstract boolean draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer);
+	public abstract boolean draw(SpriteBatch spriteBatch);
 
 	// Begin massive list of setters/getters ***********************************
 	

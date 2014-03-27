@@ -77,7 +77,7 @@ public class Food extends Entity implements Observable {
 	}
 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+	public boolean draw(SpriteBatch spriteBatch) {
 
 		// Check if we contain food. If not, don't draw and order deletion!
 		if (stockpile > 0) {

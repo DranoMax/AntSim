@@ -37,7 +37,7 @@ public class Anthill extends Entity {
 	}
 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+	public boolean draw(SpriteBatch spriteBatch) {
 		
 		anthillImage.setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
 		// Note: right now the anthillImage size is scaled by a factor of 2.5 - purely

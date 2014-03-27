@@ -1,9 +1,6 @@
 package com.hatstick.antgame;
 
 import java.util.ArrayList;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -12,29 +9,18 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.hatstick.entity.Ant;
 import com.hatstick.entity.Anthill;
 import com.hatstick.entity.Entity;
-import com.hatstick.interfaces.State;
 import com.hatstick.entity.Food;
 import com.hatstick.entity.Level;
 
 public class WorldRenderer {
 
 	private OrthographicCamera cam;
-	/**
-	 * Used to provide secondary window that zooms in on
-	 * selected ants.
-	 */
-	private OrthographicCamera antCloseUpCam;
+
 	private static final float CAMERA_WIDTH = 800;
 	private static final float CAMERA_HEIGHT = 480;
-
-	// Mouse touch
-	private Vector2 target;
 
 	// Ant that camera is following
 	Ant followingAnt = null;
@@ -42,10 +28,8 @@ public class WorldRenderer {
 	private boolean isZooming = false;
 
 	private SpriteBatch spriteBatch;
-	private SpriteBatch spriteBatchCloseUp;
 	private ShapeRenderer shapeRenderer;
 
-	private ArrayList<Food> foodToDelete = new ArrayList<Food>();
 	private ArrayList<Entity> entityToDelete = new ArrayList<Entity>();
 
 	private Level level;
@@ -55,14 +39,11 @@ public class WorldRenderer {
 		this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
 		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
 		this.cam.update();
-		this.antCloseUpCam = new OrthographicCamera(200,200);
-		this.target = new Vector2(0,0);
 		loadTextures();
 	}
 
 	private void loadTextures() {
 		spriteBatch = new SpriteBatch();
-		spriteBatchCloseUp = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 	}
 
@@ -78,11 +59,13 @@ public class WorldRenderer {
 	}
 
 	public void selectAnt(Circle touch) {
-		for (Ant ant : level.getAnts().keySet()) {
-			if (Intersector.overlaps(ant.getBoundingCircle(),touch)) {
-				isZooming = true;
-				setFollowingAnt(ant);
-				break;
+		for (Entity entity : level.getEntities().keySet()) {
+			if (entity instanceof Ant) {
+				if (Intersector.overlaps(((Ant)entity).getBoundingCircle(),touch)) {
+					isZooming = true;
+					setFollowingAnt((Ant)entity);
+					break;
+				}
 			}
 		}
 	}
@@ -93,19 +76,11 @@ public class WorldRenderer {
 
 	private void antCloseUp() {
 		smoothZoom();
-		antCloseUpCam.position.set(followingAnt.getPosition().x,followingAnt.getPosition().y,0);
-		antCloseUpCam.update();
-
-		spriteBatchCloseUp.setProjectionMatrix(antCloseUpCam.combined);
-
-		// Draw our close up
-		//	spriteBatchCloseUp.begin();
-		//	spriteBatchCloseUp.draw(region, x, y, originX, originY, width, height, scaleX, scaleY, rotation);
 	}
 
 	public void smoothZoom() {
-		if (isZooming == true && antCloseUpCam.zoom-0.05f > 0.3f) {
-			antCloseUpCam.zoom -= 0.05f;
+		if (isZooming == true && cam.zoom-0.05f > 0.3f) {
+			cam.zoom -= 0.05f;
 		}
 		else {
 			isZooming = false;
@@ -118,22 +93,6 @@ public class WorldRenderer {
 	public void setTranslation(Vector2 trans, OrthographicCamera camera) {
 		Vector3 temp = new Vector3(trans.x,trans.y,0);
 		camera.translate(temp);
-	}
-
-	public void setTouch(float x, float y) {
-		Vector3 temp = new Vector3(x, y, 0);
-		cam.unproject(temp);
-		target.x = temp.x;
-		target.y = temp.y;
-		float angle = 0.0f;
-		for( Ant ant : level.getAnts().keySet() ) {
-			angle = (float) ((Math.atan2 (target.y - ant.getPosition().y, -(target.x - ant.getPosition().x))*180.0d/Math.PI));
-			angle -= 90;
-			if(angle < 0) angle = 360-(-angle);
-			angle = 360-angle;
-			//	ant.setTarget(angle);
-			//	ant.setDestination(target);
-		}
 	}
 
 	private void antCalculations() {
@@ -180,7 +139,7 @@ public class WorldRenderer {
 
 		for( Entity entity : level.getEntities().keySet() ) {
 			// If entity says it should be deleted, do so!
-			if (!entity.draw(spriteBatch, shapeRenderer)) {
+			if (!entity.draw(spriteBatch)) {
 				entityToDelete.add(entity);
 			}
 		}

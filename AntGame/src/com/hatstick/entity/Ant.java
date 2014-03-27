@@ -146,7 +146,7 @@ public class Ant extends MovingEntity implements Observer {
 	 */
 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+	public boolean draw(SpriteBatch spriteBatch) {
 		performMove();
 		
 		antImage.setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
