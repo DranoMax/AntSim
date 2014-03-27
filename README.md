@@ -15,6 +15,12 @@ Features v.0.2.3
 * When they find food, they return it to their ant hill using a path of nodes.
 * User can zoom/pan across Ant world.
 
+
+Screenshots
+-----------
+<img src="/Screenshot_2014-03-25-19-18-04.png" width="700px">
+<img src="/Screenshot_2014-03-25-19-18-44.png" width="700px">
+
 Todo
 ----
 
