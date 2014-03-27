@@ -146,7 +146,9 @@ public class Ant extends MovingEntity implements Observer {
 	 */
 
 	@Override
-	public void draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+	public boolean draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer) {
+		performMove();
+		
 		antImage.setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
 		// Note: right now the antImage size is scaled by a factor of 5 - purely
 		// based on trial and error for looks.  Needs to be tied somehow to screen
@@ -156,12 +158,13 @@ public class Ant extends MovingEntity implements Observer {
 		antImage.setRotation(getTarget());
 
 		antImage.draw(spriteBatch);
+		
+		return true;
 	}
 	
 	public void drawLines(ShapeRenderer shapeRenderer) {
-		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLUE);
-
+		
 		PathNode head = getPath().getHead();
 		if (getPath().size() != 0 && head.getNext() != null) {
 			head = head.getNext();
@@ -170,12 +173,10 @@ public class Ant extends MovingEntity implements Observer {
 				head = head.getNext();
 			}
 			shapeRenderer.line(head.getPos(), getPosition());
-			shapeRenderer.end();
 		}
 	}
 	
 	public void drawNodes(ShapeRenderer shapeRenderer) {
-		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.ORANGE);
 
 		for (PathNode node : getPath().getMap().keySet()) {
@@ -192,6 +193,5 @@ public class Ant extends MovingEntity implements Observer {
 			}
 			shapeRenderer.circle(node.getPos().x, node.getPos().y,2f);
 		}
-		shapeRenderer.end();
 	}
 }

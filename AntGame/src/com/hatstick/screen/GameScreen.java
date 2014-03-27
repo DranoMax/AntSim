@@ -89,7 +89,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean scrolled(int amount) {
-		renderer.setZoom(amount);
+		renderer.setZoom(amount*1.5f);
 		return true;
 	}
 
@@ -161,7 +161,11 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		renderer.setTranslation(new Vector2 (-deltaX,deltaY));
+		if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+			// Stop following ant
+			renderer.setFollowingAnt(null);
+		}
+		renderer.setTranslation(new Vector2 (-deltaX,deltaY), renderer.getCam());
 		return true;
 	}
 

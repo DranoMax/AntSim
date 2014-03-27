@@ -26,8 +26,11 @@ public abstract class Entity {
 	
 	/**
 	 * Called by WorldRenderer to draw the Entity described by subclass
+	 * 
+	 * @return boolean
+	 * If the enitity is to be deleted, returns false, else true.
 	 */
-	public abstract void draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer);
+	public abstract boolean draw(SpriteBatch spriteBatch, ShapeRenderer shapeRenderer);
 
 	// Begin massive list of setters/getters ***********************************
 	
