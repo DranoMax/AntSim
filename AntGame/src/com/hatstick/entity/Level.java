@@ -16,7 +16,7 @@ public class Level {
 	}
 
 	public void createWorld() {
-		for(int i = 0; i <= 25; i++) {
+		for(int i = 0; i <= 2; i++) {
 			antsMap.put(new Ant(i,new Vector2(600,300)), i);
 			entities.put(new Ant(i,new Vector2(600,300)), i);
 		}

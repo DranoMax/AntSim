@@ -32,6 +32,7 @@ public class PathList {
 			head = tail = node;
 			head.setNext(tail);
 			tail.setPrev(head);
+			head.setPrev(null);
 			map.put(head, state);
 		} 
 		else {

@@ -19,12 +19,6 @@ public class PathNode {
 		setNext(null);
 	}
 	
-	public PathNode(Vector2 pos, PathNode prev) {
-		this.setPos(pos);
-		this.setPrev(prev);
-		setNext(null);
-	}
-	
 	public int getId() {
 		return id;
 	}

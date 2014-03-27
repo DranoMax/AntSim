@@ -26,7 +26,7 @@ public class Gather implements MovementBehavior {
 			goingHome = true;
 		}
 		
-	//	System.out.println("nodeId: " + currentNode.getId() + " out of " + path.size());
+		System.out.println("nodeId: " + currentNode.getId() + " out of " + path.size());
 
 		Vector2 temp = position.cpy().sub(currentNode.getPos());
 		float temp2 = speed*Gdx.graphics.getDeltaTime();

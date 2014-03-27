@@ -76,6 +76,7 @@ public class WorldRenderer {
 
 	private void antCloseUp() {
 		smoothZoom();
+		cam.position.set(followingAnt.getPosition().x, followingAnt.getPosition().y,0);
 	}
 
 	public void smoothZoom() {
@@ -96,7 +97,7 @@ public class WorldRenderer {
 	}
 
 	private void antCalculations() {
-
+/*
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
 		for( Entity entity : level.getEntities().keySet() ) {
@@ -105,7 +106,7 @@ public class WorldRenderer {
 			}
 		}
 		shapeRenderer.end();
-
+*/
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Filled);
 		for( Entity entity : level.getEntities().keySet() ) {
@@ -133,6 +134,8 @@ public class WorldRenderer {
 
 		// tell the camera to update its matrices.
 		cam.update();
+		
+		antCalculations();
 
 		spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
@@ -145,12 +148,10 @@ public class WorldRenderer {
 		}
 
 		spriteBatch.end();
-
+		
 		for( Entity entity : entityToDelete ) {
 			entityToDelete.remove(entity);
 		}
-
-		antCalculations();
 
 		// Check if mini window should be drawn
 		if (followingAnt != null) {

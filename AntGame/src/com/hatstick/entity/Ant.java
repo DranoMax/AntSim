@@ -41,7 +41,7 @@ public class Ant extends MovingEntity implements Observer {
 		super(id, position,5f);
 		setSize(5f,5f);
 		setSpeed(100f);
-		//	knownHills.put(new Anthill(position), 1);
+
 		path.insert(new PathNode(path.size(),getPosition()), State.SEARCHING);
 		setState(State.SEARCHING);
 
