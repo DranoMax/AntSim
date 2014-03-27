@@ -1,6 +1,8 @@
 package com.hatstick.antgame;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -30,9 +32,9 @@ public class WorldRenderer {
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
-	private ArrayList<Entity> entityToDelete = new ArrayList<Entity>();
-
 	private Level level;
+	
+	private ArrayList<Ant> newAnts = new ArrayList<Ant>();
 
 	public WorldRenderer(Level level) {
 		this.level = level;
@@ -59,7 +61,8 @@ public class WorldRenderer {
 	}
 
 	public void selectAnt(Circle touch) {
-		for (Entity entity : level.getEntities().keySet()) {
+		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
+			Entity entity = iter.next();
 			if (entity instanceof Ant) {
 				if (Intersector.overlaps(((Ant)entity).getBoundingCircle(),touch)) {
 					isZooming = true;
@@ -95,28 +98,34 @@ public class WorldRenderer {
 		Vector3 temp = new Vector3(trans.x,trans.y,0);
 		camera.translate(temp);
 	}
-
-	private void antCalculations() {
-/*
+	
+	private void drawPaths() {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
-		for( Entity entity : level.getEntities().keySet() ) {
+		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
+			Entity entity = iter.next();
 			if( entity instanceof Ant) {
 				((Ant)entity).drawLines(shapeRenderer);
 			}
 		}
 		shapeRenderer.end();
-*/
+	}
+	
+	private void drawNodes() {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Filled);
-		for( Entity entity : level.getEntities().keySet() ) {
+		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
+			Entity entity = iter.next();
 			if( entity instanceof Ant) {
 				((Ant)entity).drawNodes(shapeRenderer);
 			}
 		}
 		shapeRenderer.end();
+	}
 
-		for( Entity entity : level.getEntities().keySet() ) {
+	private void antCalculations() {
+		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
+			Entity entity = iter.next();
 			if( entity instanceof Ant) {
 				for( Entity entity2 : level.getEntities().keySet() ) {
 					if( entity2 instanceof Food ) {
@@ -130,28 +139,44 @@ public class WorldRenderer {
 		}
 	}
 
+	private void createNewAnts() {
+		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
+			Entity entity = iter.next();
+			if( entity instanceof Anthill) {
+				Ant ant = ((Anthill) entity).createAnt();
+				if( ant != null ) {
+					newAnts.add(ant);
+				}
+			}
+		}
+		for(Iterator<Ant> iter = newAnts.iterator(); iter.hasNext(); ) {
+			Ant ant = iter.next();
+			ant.setId(level.getEntities().size());
+			level.getEntities().put(ant, level.getEntities().size());
+		}
+	}
+
 	public void render() {
 
 		// tell the camera to update its matrices.
 		cam.update();
-		
+
+	//	drawPaths();
+		drawNodes();
 		antCalculations();
+		createNewAnts();
 
 		spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
 
-		for( Entity entity : level.getEntities().keySet() ) {
-			// If entity says it should be deleted, do so!
+		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
+			Entity entity = iter.next();
 			if (!entity.draw(spriteBatch)) {
-				entityToDelete.add(entity);
+				iter.remove();
 			}
 		}
 
 		spriteBatch.end();
-		
-		for( Entity entity : entityToDelete ) {
-			entityToDelete.remove(entity);
-		}
 
 		// Check if mini window should be drawn
 		if (followingAnt != null) {

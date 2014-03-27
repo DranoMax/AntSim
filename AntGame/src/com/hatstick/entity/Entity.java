@@ -61,6 +61,10 @@ public abstract class Entity {
 		return SIZE;
 	}
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getId() {
 		return id;
 	}

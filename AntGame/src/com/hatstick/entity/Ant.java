@@ -141,10 +141,9 @@ public class Ant extends MovingEntity implements Observer {
 		}
 	}
 	
-	/**
-	 * Below contains the methods called by WorldRenderer used for drawing
-	 */
 
+	// Below contains the methods called by WorldRenderer used for drawing
+	 
 	@Override
 	public boolean draw(SpriteBatch spriteBatch) {
 		performMove();
@@ -164,9 +163,9 @@ public class Ant extends MovingEntity implements Observer {
 	
 	public void drawLines(ShapeRenderer shapeRenderer) {
 		shapeRenderer.setColor(Color.BLUE);
-		
+
 		PathNode head = getPath().getHead();
-		if (getPath().size() != 0 && head.getNext() != null) {
+		if (getPath().size() >= 2) {
 			head = head.getNext();
 			while (head.getNext() != null) {
 				shapeRenderer.line(head.getPos(), head.getNext().getPos());

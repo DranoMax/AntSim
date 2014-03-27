@@ -9,9 +9,15 @@ import com.badlogic.gdx.math.Vector2;
 
 /** TODO: include population size, food levels, happiness? */
 public class Anthill extends Entity {
-	
+
 	private double foodStores = 0;
-	
+
+	/**
+	 * Used for timing the addition of new ants
+	 */
+	private float newAntTimer = 6f;
+	private final int NEW_ANT_WAIT = 10;
+
 	private BitmapFont font;
 	private Sprite anthillImage;
 
@@ -29,14 +35,28 @@ public class Anthill extends Entity {
 	public void setFoodStores(double foodStores) {
 		this.foodStores = foodStores;
 	}
-	
+
 	public void putFood(double food) {
 		foodStores += food;
 	}
 
+	public Ant createAnt() {
+		
+		newAntTimer += Gdx.graphics.getDeltaTime();
+		//System.err.println(newAntTimer);
+		if (newAntTimer >= NEW_ANT_WAIT && foodStores >= 5) {
+			foodStores -= 5;
+			newAntTimer -= NEW_ANT_WAIT;
+			return new Ant(0, new Vector2(getPosition().x+getSize().x/2,getPosition().y+getSize().y/2));
+		}
+		else {
+			return null;
+		}
+	}
+
 	@Override
 	public boolean draw(SpriteBatch spriteBatch) {
-		
+
 		anthillImage.setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
 		// Note: right now the anthillImage size is scaled by a factor of 2.5 - purely
 		// based on trial and error for looks.  Needs to be tied somehow to screen
@@ -44,7 +64,7 @@ public class Anthill extends Entity {
 		anthillImage.setSize(getSize().x*2.5f,getSize().y*2.5f);
 		anthillImage.draw(spriteBatch);
 
-		
+
 		// Draw our food levels
 		font.setScale(1.5f);
 		font.setColor(0.0f, 0.0f, 0.0f, 1.0f);
