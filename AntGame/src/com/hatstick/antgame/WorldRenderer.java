@@ -29,7 +29,9 @@ public class WorldRenderer {
 	Ant followingAnt = null;
 	// isZooming used after selecting an ant in order to "zoom" smoothly up to it
 	private boolean isZooming = false;
-
+	public boolean drawNodes = false;
+	public boolean drawPath = false;
+	
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
@@ -117,7 +119,7 @@ public class WorldRenderer {
 		camera.translate(temp);
 	}
 	
-	private void drawPaths() {
+	public void drawPaths() {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
 		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
@@ -129,7 +131,7 @@ public class WorldRenderer {
 		shapeRenderer.end();
 	}
 	
-	private void drawNodes() {
+	public void drawNodes() {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Filled);
 		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
@@ -179,8 +181,8 @@ public class WorldRenderer {
 		// tell the camera to update its matrices.
 		cam.update();
 
-	//	drawPaths();
-		drawNodes();
+		if (drawPath) drawPaths();
+		if (drawNodes) drawNodes();
 		antCalculations();
 		createNewAnts();
 
