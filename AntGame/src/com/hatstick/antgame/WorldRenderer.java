@@ -3,6 +3,7 @@ package com.hatstick.antgame;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -35,6 +36,10 @@ public class WorldRenderer {
 	private Level level;
 	
 	private ArrayList<Ant> newAnts = new ArrayList<Ant>();
+	
+	// Our temporary variables (to avoid multiple unnecessary instantiations
+	private Vector3 temp = new Vector3();
+	private Vector3 destination = new Vector3();
 
 	public WorldRenderer(Level level) {
 		this.level = level;
@@ -79,12 +84,25 @@ public class WorldRenderer {
 
 	private void antCloseUp() {
 		smoothZoom();
-		cam.position.set(followingAnt.getPosition().x, followingAnt.getPosition().y,0);
+		smoothPan(followingAnt.getPosition().x, followingAnt.getPosition().y);
+	}
+	
+	public void smoothPan(float x, float y) {
+		destination = new Vector3(x,y,0);
+		temp = cam.position.cpy().sub(destination);
+		float speed = 4*destination.dst(cam.position);
+		float epsilon =  Gdx.graphics.getDeltaTime()*speed;
+		// Determine if cam is within reasonable distance of ant (to prevent graphical issues)
+		if (Math.abs(temp.x) > epsilon || Math.abs(temp.y) > epsilon) {
+			cam.position.add((destination.cpy().sub(cam.position)).nor().scl(Gdx.graphics.getDeltaTime()*speed));
+		} else {
+			cam.position.set(x,y,0);
+		}
 	}
 
 	public void smoothZoom() {
 		if (isZooming == true && cam.zoom-0.05f > 0.3f) {
-			cam.zoom -= 0.05f;
+			cam.zoom -= 0.05f*(cam.zoom-0.3f);
 		}
 		else {
 			isZooming = false;
