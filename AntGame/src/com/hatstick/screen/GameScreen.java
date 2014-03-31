@@ -34,12 +34,12 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	// Following used for overlying menu
 	private Stage menu;
 	private Skin skin;
-	
+
 	private float menuFadeTimer = 0;
 	private final int MENU_FADE_WAIT = 2;
 	private boolean menuIsFading = true;
 	// End overlying menu items
-	
+
 	/**
 	 * touchCircle used for determining touches.
 	 */
@@ -57,17 +57,20 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 		Gdx.input.setInputProcessor(multi);
 
 	}
-	
+
 	public void createMenu() {
 		menu = new Stage(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),true);
 		skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
 
 		final TextButton nodesButton = new TextButton("Nodes",skin,"default");
 		final TextButton pathButton = new TextButton("Path",skin,"default");
-		
-		nodesButton.setWidth(80);
-		pathButton.setWidth(80);
-		
+
+		nodesButton.setWidth(Gdx.graphics.getWidth()/9);
+		pathButton.setWidth(Gdx.graphics.getWidth()/9);
+
+		nodesButton.setHeight(Gdx.graphics.getHeight()/8);
+		pathButton.setHeight(Gdx.graphics.getHeight()/8);
+
 		nodesButton.setPosition(0, Gdx.graphics.getHeight()-nodesButton.getHeight());
 		pathButton.setPosition(nodesButton.getWidth(), Gdx.graphics.getHeight()-pathButton.getHeight());
 
@@ -76,20 +79,20 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 			public void clicked(InputEvent event, float x, float y) {
 				renderer.drawNodes = !renderer.drawNodes;
 			}
-			
+
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
 				menuIsFading = false;
 			}
 		});
 		menu.addActor(nodesButton);
-		
+
 		pathButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				renderer.drawPath = !renderer.drawPath;
 			}
-			
+
 			@Override
 			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
 				menuIsFading = false;
@@ -97,7 +100,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 		});
 		menu.addActor(pathButton);
 	}
-	
+
 	private void handleMenuFade() {
 		if (menuIsFading) {
 			menu.addAction(sequence(fadeOut(1),delay(.2f),visible(false)));
@@ -105,7 +108,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 			menu.getRoot().clearActions();
 			menu.addAction(visible(true));
 			menu.addAction(fadeIn(.5f));
-			
+
 			menuFadeTimer += Gdx.graphics.getDeltaTime();
 			if (menuFadeTimer > MENU_FADE_WAIT) {
 				menuFadeTimer = 0;
@@ -120,7 +123,7 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 		Gdx.gl.glClearColor(1,1,1,1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		renderer.render();
-		
+
 		handleMenuFade();
 		menu.act(Gdx.graphics.getDeltaTime());
 		menu.draw();
@@ -217,19 +220,28 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
+
 		// Stop following ant
 		renderer.setFollowingAnt(null);
+		Vector3 temp = new Vector3();
+		if (count == 1) {
+			// Unproject our values from Screen to world values
+			temp.set(x,y,0);
+			renderer.getCam().unproject(temp);
+			touchCircle.setPosition(temp.x,temp.y);
+			// See if we've selected an ant
+			renderer.selectAnt(touchCircle);
 
-		// Unproject our values from Screen to world values
-		Vector3 temp = new Vector3(x,y,0);
-		renderer.getCam().unproject(temp);
-		touchCircle.setPosition(temp.x,temp.y);
-		// See if we've selected an ant
-		renderer.selectAnt(touchCircle);
-		
-		// FadeIn our menu
-		menuIsFading = false;
-
+			// FadeIn our menu
+			menuIsFading = false;
+		} else if (count == 2) { // double tap
+			renderer.setZooming(true);
+			renderer.setZoomTo(renderer.getCam().zoom/2);
+			temp.set(x,y,0);
+			renderer.getCam().unproject(temp);
+			renderer.setPanning(true);
+			renderer.setPanTo(temp.x,temp.y);
+		}
 		return false;
 	}
 

@@ -13,7 +13,6 @@ public class PathList {
 	
 	private PathNode head;
 	private PathNode tail;
-	private PathNode temp;
 	
 	private int size;
 
@@ -22,7 +21,6 @@ public class PathList {
 	public PathList() {
 		head = null;
 		tail = null;
-		temp = null;
 		size = 0;
 		setMap(new HashMap<PathNode,State>());
 	}

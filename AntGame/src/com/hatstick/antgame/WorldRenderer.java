@@ -26,9 +26,13 @@ public class WorldRenderer {
 	private static final float CAMERA_HEIGHT = 480;
 
 	// Ant that camera is following
-	Ant followingAnt = null;
+	private Ant followingAnt = null;
 	// isZooming used after selecting an ant in order to "zoom" smoothly up to it
 	private boolean isZooming = false;
+	private float zoomTo = 0;
+	
+	private boolean isPanning = false;
+	
 	public boolean drawNodes = false;
 	public boolean drawPath = false;
 	
@@ -41,7 +45,7 @@ public class WorldRenderer {
 	
 	// Our temporary variables (to avoid multiple unnecessary instantiations
 	private Vector3 temp = new Vector3();
-	private Vector3 destination = new Vector3();
+	private Vector3 panTo = new Vector3();
 
 	public WorldRenderer(Level level) {
 		this.level = level;
@@ -59,6 +63,14 @@ public class WorldRenderer {
 	public OrthographicCamera getCam() {
 		return cam;
 	}
+	
+	public float getScreenWidth() {
+		return CAMERA_WIDTH;
+	}
+	
+	public float getScreenHeight() {
+		return CAMERA_HEIGHT;
+	}
 
 	public void setZoom(float i) {
 		// Check that we don't zoom too close!
@@ -73,6 +85,7 @@ public class WorldRenderer {
 			if (entity instanceof Ant) {
 				if (Intersector.overlaps(((Ant)entity).getBoundingCircle(),touch)) {
 					isZooming = true;
+					zoomTo = 0.3f;
 					setFollowingAnt((Ant)entity);
 					break;
 				}
@@ -85,30 +98,47 @@ public class WorldRenderer {
 	}
 
 	private void antCloseUp() {
-		smoothZoom();
-		smoothPan(followingAnt.getPosition().x, followingAnt.getPosition().y);
+		panTo.set(followingAnt.getPosition().x,followingAnt.getPosition().y,0);
+		smoothPan();
 	}
 	
-	public void smoothPan(float x, float y) {
-		destination = new Vector3(x,y,0);
-		temp = cam.position.cpy().sub(destination);
-		float speed = 4*destination.dst(cam.position);
+	public void smoothPan() {
+		temp = cam.position.cpy().sub(panTo);
+		float speed = 4*panTo.dst(cam.position);
 		float epsilon =  Gdx.graphics.getDeltaTime()*speed;
 		// Determine if cam is within reasonable distance of ant (to prevent graphical issues)
 		if (Math.abs(temp.x) > epsilon || Math.abs(temp.y) > epsilon) {
-			cam.position.add((destination.cpy().sub(cam.position)).nor().scl(Gdx.graphics.getDeltaTime()*speed));
+			cam.position.add((panTo.cpy().sub(cam.position)).nor().scl(Gdx.graphics.getDeltaTime()*speed));
 		} else {
-			cam.position.set(x,y,0);
+			isPanning = false;
+			cam.position.set(panTo.x,panTo.y,0);
 		}
 	}
 
-	public void smoothZoom() {
-		if (isZooming == true && cam.zoom-0.05f > 0.3f) {
-			cam.zoom -= 0.05f*(cam.zoom-0.3f);
+	public void smoothZoom(float zoomTo) {
+		if (isZooming == true && cam.zoom-0.05f > zoomTo) {
+			cam.zoom -= 0.05f*(cam.zoom-zoomTo);
 		}
 		else {
+			isPanning = false;
 			isZooming = false;
 		}
+	}
+	
+	public void setZooming(boolean zoom) {
+		isZooming = zoom;
+	}
+	
+	public void setZoomTo(float zoomTo) {
+		this.zoomTo = zoomTo;
+	}
+	
+	public void setPanning(boolean pan) {
+		isPanning = pan;
+	}
+	
+	public void setPanTo(float x, float y) {
+		panTo.set(x,y,0);
 	}
 
 	/**
@@ -201,6 +231,11 @@ public class WorldRenderer {
 		// Check if mini window should be drawn
 		if (followingAnt != null) {
 			antCloseUp();
+		} else if(isPanning == true) {
+			smoothPan();
+		}
+		if (isZooming == true) {
+			smoothZoom(zoomTo);
 		}
 	}
 }
