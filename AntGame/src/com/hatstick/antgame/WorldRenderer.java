@@ -190,6 +190,39 @@ public class WorldRenderer {
 		}
 	}
 
+	/**
+	 * Checks to see if an Ant is inside of either a food source or
+	 * Anthill. Ant takes care of the rest.
+	 * 
+	 * @param entity
+	 */
+	private void checkAntPositions(Entity entity) {
+		for( Entity entity2 : level.getEntities().keySet() ) {
+			if( entity2 instanceof Food ) {
+				((Ant)entity).checkIfInsideFood((Food)entity2);
+			}
+			else if( entity2 instanceof Anthill ) {
+				((Ant)entity).checkIfInsideAnthill((Anthill)entity2);
+			}
+		}
+	}
+
+	/**
+	 * Used to check/handle camera panning and zooming to either specified Ant
+	 * or tapped location.
+	 */
+	private void handleCameraMovements() {
+		// Check if mini window should be drawn
+		if (followingAnt != null) {
+			antCloseUp();
+		} else if(isPanning == true) {
+			smoothPan();
+		}
+		if (isZooming == true) {
+			smoothZoom(zoomTo);
+		}
+	}
+
 	public void render() {
 
 		// tell the camera to update its matrices.
@@ -224,28 +257,12 @@ public class WorldRenderer {
 				if (!entity.draw(spriteBatch, antSprite)) {
 					iter.remove();
 				}
-				for( Entity entity2 : level.getEntities().keySet() ) {
-					if( entity2 instanceof Food ) {
-						((Ant)entity).checkIfInsideFood((Food)entity2);
-					}
-					else if( entity2 instanceof Anthill ) {
-						((Ant)entity).checkIfInsideAnthill((Anthill)entity2);
-					}
-				}
+				checkAntPositions(entity);
 			}
 		}
 		spriteBatch.end();
 
 		createNewAnts();
-
-		// Check if mini window should be drawn
-		if (followingAnt != null) {
-			antCloseUp();
-		} else if(isPanning == true) {
-			smoothPan();
-		}
-		if (isZooming == true) {
-			smoothZoom(zoomTo);
-		}
+		handleCameraMovements();
 	}
 }

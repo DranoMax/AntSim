@@ -42,6 +42,22 @@ public class PathList {
 		size++;
 	}
 	
+	public void clear() {
+		head = tail = null;
+		size = 0;
+		map.clear();
+	}
+	
+	/**
+	 * Deletes everything and sets head to given Node
+	 */
+	public void reset(PathNode node, State state) {
+		map.clear();
+		head = tail = null;
+		size = 0;
+		insert(node, state);
+	}
+	
 	public PathNode getHead() {
 		return head;
 	}

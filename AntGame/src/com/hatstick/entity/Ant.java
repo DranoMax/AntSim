@@ -105,7 +105,7 @@ public class Ant extends MovingEntity implements Observer {
 			setState(State.SEARCHING);
 		}
 	}
-	
+
 	/**
 	 * Used to determine if ant is inside a food source - if so, the ant begins gathering
 	 * @param food
@@ -122,25 +122,31 @@ public class Ant extends MovingEntity implements Observer {
 					(float) ((food.getPosition().y-food.getSize().y/4)+((food.getSize().y/2)*Math.random()))));
 		}
 	}
-	
+
 	/**
 	 * Used to determine if ant is inside anthill - if so, drop off food if carrying
 	 * @param hill
 	 */
 	public void checkIfInsideAnthill(Anthill hill) {
 		if( Intersector.overlaps(new Circle(getPosition().x, getPosition().y, getSize().x/2),
-				new Circle(hill.getPosition().x, hill.getPosition().y, hill.getSize().x)) && getFood() > 0) {
-			putFood(hill);
+				new Circle(hill.getPosition().x, hill.getPosition().y, hill.getSize().x))) {
+			if( getFood() > 0 ) {
+				putFood(hill);
+			} 
+			else { // If ant ends up back at the nest without food, he should restart his path instead of adding to it.
+				path.reset(new PathNode(0,new Vector2(hill.getPosition().x,
+						hill.getPosition().y)), State.SEARCHING);
+			}
 		}
 	}
-	
+
 
 	// Below contains the methods called by WorldRenderer used for drawing
-	 
+
 	@Override
 	public boolean draw(SpriteBatch spriteBatch, Sprite sprite) {
 		performMove();
-		
+
 		sprite.setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
 		// Note: right now the sprite size is scaled by a factor of 5 - purely
 		// based on trial and error for looks.  Needs to be tied somehow to screen
@@ -150,16 +156,15 @@ public class Ant extends MovingEntity implements Observer {
 		sprite.setRotation(getTarget());
 
 		sprite.draw(spriteBatch);
-		
+
 		return true;
 	}
-	
+
 	public void drawLines(ShapeRenderer shapeRenderer) {
 		shapeRenderer.setColor(Color.BLUE);
 
 		PathNode head = getPath().getHead();
 		if (getPath().size() >= 2) {
-			head = head.getNext();
 			while (head.getNext() != null) {
 				shapeRenderer.line(head.getPos(), head.getNext().getPos());
 				head = head.getNext();
@@ -167,7 +172,7 @@ public class Ant extends MovingEntity implements Observer {
 			shapeRenderer.line(head.getPos(), getPosition());
 		}
 	}
-	
+
 	public void drawNodes(ShapeRenderer shapeRenderer) {
 		shapeRenderer.setColor(Color.ORANGE);
 
