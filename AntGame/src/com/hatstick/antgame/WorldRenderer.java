@@ -5,7 +5,10 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
@@ -30,19 +33,25 @@ public class WorldRenderer {
 	// isZooming used after selecting an ant in order to "zoom" smoothly up to it
 	private boolean isZooming = false;
 	private float zoomTo = 0;
-	
+
 	private boolean isPanning = false;
-	
+
 	public boolean drawNodes = false;
 	public boolean drawPath = false;
-	
+
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
+	// Load textures to be used in this level
+	private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("drawable/antsim.pack"));
+	private Sprite antSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("ant")));
+	private Sprite foodSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("food")));
+	private Sprite anthillSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("anthill")));
+
 	private Level level;
-	
+
 	private ArrayList<Ant> newAnts = new ArrayList<Ant>();
-	
+
 	// Our temporary variables (to avoid multiple unnecessary instantiations
 	private Vector3 temp = new Vector3();
 	private Vector3 panTo = new Vector3();
@@ -63,11 +72,11 @@ public class WorldRenderer {
 	public OrthographicCamera getCam() {
 		return cam;
 	}
-	
+
 	public float getScreenWidth() {
 		return CAMERA_WIDTH;
 	}
-	
+
 	public float getScreenHeight() {
 		return CAMERA_HEIGHT;
 	}
@@ -101,7 +110,7 @@ public class WorldRenderer {
 		panTo.set(followingAnt.getPosition().x,followingAnt.getPosition().y,0);
 		smoothPan();
 	}
-	
+
 	public void smoothPan() {
 		temp = cam.position.cpy().sub(panTo);
 		float speed = 4*panTo.dst(cam.position);
@@ -124,19 +133,19 @@ public class WorldRenderer {
 			isZooming = false;
 		}
 	}
-	
+
 	public void setZooming(boolean zoom) {
 		isZooming = zoom;
 	}
-	
+
 	public void setZoomTo(float zoomTo) {
 		this.zoomTo = zoomTo;
 	}
-	
+
 	public void setPanning(boolean pan) {
 		isPanning = pan;
 	}
-	
+
 	public void setPanTo(float x, float y) {
 		panTo.set(x,y,0);
 	}
@@ -148,7 +157,7 @@ public class WorldRenderer {
 		Vector3 temp = new Vector3(trans.x,trans.y,0);
 		camera.translate(temp);
 	}
-	
+
 	public void drawPaths() {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Line);
@@ -160,7 +169,7 @@ public class WorldRenderer {
 		}
 		shapeRenderer.end();
 	}
-	
+
 	public void drawNodes() {
 		shapeRenderer.setProjectionMatrix(cam.combined);
 		shapeRenderer.begin(ShapeType.Filled);
@@ -173,32 +182,7 @@ public class WorldRenderer {
 		shapeRenderer.end();
 	}
 
-	private void antCalculations() {
-		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
-			Entity entity = iter.next();
-			if( entity instanceof Ant) {
-				for( Entity entity2 : level.getEntities().keySet() ) {
-					if( entity2 instanceof Food ) {
-						((Ant)entity).checkIfInsideFood((Food)entity2);
-					}
-					else if( entity2 instanceof Anthill ) {
-						((Ant)entity).checkIfInsideAnthill((Anthill)entity2);
-					}
-				}
-			}
-		}
-	}
-
 	private void createNewAnts() {
-		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
-			Entity entity = iter.next();
-			if( entity instanceof Anthill) {
-				Ant ant = ((Anthill) entity).createAnt();
-				if( ant != null ) {
-					newAnts.add(ant);
-				}
-			}
-		}
 		for(Iterator<Ant> iter = newAnts.iterator(); iter.hasNext(); ) {
 			Ant ant = iter.next();
 			ant.setId(level.getEntities().size());
@@ -213,20 +197,46 @@ public class WorldRenderer {
 
 		if (drawPath) drawPaths();
 		if (drawNodes) drawNodes();
-		antCalculations();
-		createNewAnts();
+		//	antCalculations();
+
 
 		spriteBatch.setProjectionMatrix(cam.combined);
 		spriteBatch.begin();
 
 		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
 			Entity entity = iter.next();
-			if (!entity.draw(spriteBatch)) {
-				iter.remove();
+
+			if( entity instanceof Anthill) {
+				if (!entity.draw(spriteBatch, anthillSprite)) {
+					iter.remove();
+				}
+				Ant ant = ((Anthill) entity).createAnt();
+				if( ant != null ) {
+					newAnts.add(ant);
+				}
+			}
+			else if( entity instanceof Food) {
+				if (!entity.draw(spriteBatch, foodSprite)) {
+					iter.remove();
+				}
+			}
+			else if( entity instanceof Ant) {
+				if (!entity.draw(spriteBatch, antSprite)) {
+					iter.remove();
+				}
+				for( Entity entity2 : level.getEntities().keySet() ) {
+					if( entity2 instanceof Food ) {
+						((Ant)entity).checkIfInsideFood((Food)entity2);
+					}
+					else if( entity2 instanceof Anthill ) {
+						((Ant)entity).checkIfInsideAnthill((Anthill)entity2);
+					}
+				}
 			}
 		}
-
 		spriteBatch.end();
+
+		createNewAnts();
 
 		// Check if mini window should be drawn
 		if (followingAnt != null) {

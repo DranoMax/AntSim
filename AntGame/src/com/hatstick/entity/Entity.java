@@ -1,5 +1,6 @@
 package com.hatstick.entity;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
@@ -29,7 +30,7 @@ public abstract class Entity {
 	 * @return boolean
 	 * If the enitity is to be deleted, returns false, else true.
 	 */
-	public abstract boolean draw(SpriteBatch spriteBatch);
+	public abstract boolean draw(SpriteBatch spriteBatch, Sprite sprite);
 
 	// Begin massive list of setters/getters ***********************************
 	

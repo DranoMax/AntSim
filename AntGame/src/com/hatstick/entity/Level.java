@@ -10,7 +10,7 @@ public class Level {
 	private HashMap<Food, Integer> foodMap = new HashMap<Food, Integer>();
 	
 	private HashMap<Entity, Integer> entities = new HashMap<Entity, Integer>();
-
+	
 	public Level() {
 		createWorld();
 	}

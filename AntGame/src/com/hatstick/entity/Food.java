@@ -21,13 +21,11 @@ public class Food extends Entity implements Observable {
 	private double stockpile = 100;
 
 	private BitmapFont font;
-	private Sprite foodImage;
 
 	public Food(int id, Vector2 position) {
 		super(id, position, 60f);
 		setSize(60f,60f);
 		font = new BitmapFont();
-		foodImage = new Sprite(new Texture(Gdx.files.internal("data/food.png")));
 	}
 
 	public double takeFood(double amount) {
@@ -74,17 +72,17 @@ public class Food extends Entity implements Observable {
 	}
 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch) {
+	public boolean draw(SpriteBatch spriteBatch, Sprite sprite) {
 
 		// Check if we contain food. If not, don't draw and order deletion!
 		if (stockpile > 0) {
 
-			foodImage.setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
-			// Note: right now the foodImage size is scaled by a factor of 2.5 - purely
+			sprite.setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
+			// Note: right now the sprite size is scaled by a factor of 2.5 - purely
 			// based on trial and error for looks.  Needs to be tied somehow to screen
 			// size in case I decide to change it again.
-			foodImage.setSize(getSize().x*2.5f,getSize().y*2.5f);
-			foodImage.draw(spriteBatch);
+			sprite.setSize(getSize().x*2.5f,getSize().y*2.5f);
+			sprite.draw(spriteBatch);
 
 			// Draw our food levels
 			font.setScale(1.5f);

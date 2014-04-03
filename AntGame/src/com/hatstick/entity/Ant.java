@@ -29,8 +29,6 @@ public class Ant extends MovingEntity implements Observer {
 
 	Anthill closestHill = null;
 
-	private Sprite antImage;
-
 	// Ants will seek out food, once they have food,
 	// they will seek out their anthill
 
@@ -44,11 +42,6 @@ public class Ant extends MovingEntity implements Observer {
 
 		path.insert(new PathNode(path.size(),getPosition()), State.SEARCHING);
 		setState(State.SEARCHING);
-
-		// binding texture to sprite and setting some attributes
-		// loading a texture from image file
-		Texture.setEnforcePotImages(false);
-		antImage = new Sprite(new Texture(Gdx.files.internal("data/ant.png")));
 	}
 
 	@Override
@@ -145,18 +138,18 @@ public class Ant extends MovingEntity implements Observer {
 	// Below contains the methods called by WorldRenderer used for drawing
 	 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch) {
+	public boolean draw(SpriteBatch spriteBatch, Sprite sprite) {
 		performMove();
 		
-		antImage.setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
-		// Note: right now the antImage size is scaled by a factor of 5 - purely
+		sprite.setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
+		// Note: right now the sprite size is scaled by a factor of 5 - purely
 		// based on trial and error for looks.  Needs to be tied somehow to screen
 		// size in case I decide to change it again.
-		antImage.setSize(getSize().x*5,getSize().y*5);
-		antImage.setOrigin(getSize().x*5/2, getSize().y*5/2);
-		antImage.setRotation(getTarget());
+		sprite.setSize(getSize().x*5,getSize().y*5);
+		sprite.setOrigin(getSize().x*5/2, getSize().y*5/2);
+		sprite.setRotation(getTarget());
 
-		antImage.draw(spriteBatch);
+		sprite.draw(spriteBatch);
 		
 		return true;
 	}

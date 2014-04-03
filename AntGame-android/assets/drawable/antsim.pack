@@ -1,0 +1,26 @@
+
+antsim.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ant
+  rotate: false
+  xy: 1, 1
+  size: 276, 301
+  orig: 276, 301
+  offset: 0, 0
+  index: -1
+anthill
+  rotate: false
+  xy: 279, 46
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+food
+  rotate: false
+  xy: 537, 46
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
