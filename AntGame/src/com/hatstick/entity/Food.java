@@ -22,8 +22,8 @@ public class Food extends Entity implements Observable {
 
 	private BitmapFont font;
 
-	public Food(int id, Vector2 position) {
-		super(id, position, 60f);
+	public Food(int id, Sprite sprite, Vector2 position) {
+		super(id, sprite, position, 60f);
 		setSize(60f,60f);
 		font = new BitmapFont();
 	}
@@ -72,17 +72,17 @@ public class Food extends Entity implements Observable {
 	}
 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch, Sprite sprite) {
+	public boolean draw(SpriteBatch spriteBatch) {
 
 		// Check if we contain food. If not, don't draw and order deletion!
 		if (stockpile > 0) {
 
-			sprite.setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
+			getSprite().setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
 			// Note: right now the sprite size is scaled by a factor of 2.5 - purely
 			// based on trial and error for looks.  Needs to be tied somehow to screen
 			// size in case I decide to change it again.
-			sprite.setSize(getSize().x*2.5f,getSize().y*2.5f);
-			sprite.draw(spriteBatch);
+			getSprite().setSize(getSize().x*2.5f,getSize().y*2.5f);
+			getSprite().draw(spriteBatch);
 
 			// Draw our food levels
 			font.setScale(1.5f);

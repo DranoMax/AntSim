@@ -16,9 +16,12 @@ public abstract class Entity {
 	
 	private int id;
 	
-	public Entity(int id, Vector2 position, float size) {
+	private Sprite sprite;
+	
+	public Entity(int id, Sprite sprite, Vector2 position, float size) {
 		this.position = position;
 		this.id = id;
+		this.sprite = sprite;
 		boundingCircle.x = position.x + getSize().x/2;
 		boundingCircle.y = position.y;
 		boundingCircle.radius = size/2;
@@ -30,7 +33,7 @@ public abstract class Entity {
 	 * @return boolean
 	 * If the enitity is to be deleted, returns false, else true.
 	 */
-	public abstract boolean draw(SpriteBatch spriteBatch, Sprite sprite);
+	public abstract boolean draw(SpriteBatch spriteBatch);
 
 	// Begin massive list of setters/getters ***********************************
 	
@@ -68,5 +71,9 @@ public abstract class Entity {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public Sprite getSprite() {
+		return sprite;
 	}
 }

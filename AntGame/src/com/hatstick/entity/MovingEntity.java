@@ -1,13 +1,14 @@
 package com.hatstick.entity;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.hatstick.interfaces.MovementBehavior;
 import com.hatstick.interfaces.State;
 
 public abstract class MovingEntity extends Entity {
 	
-	public MovingEntity(int id, Vector2 position, float size) {
-		super(id, position, size);
+	public MovingEntity(int id, Sprite sprite, Vector2 position, float size) {
+		super(id, sprite, position, size);
 	}
 	
 	private State state = State.IDLE;

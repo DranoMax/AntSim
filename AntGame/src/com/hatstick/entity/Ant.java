@@ -35,8 +35,8 @@ public class Ant extends MovingEntity implements Observer {
 	/** How much food the ant has if any */
 	private double food = 0;
 
-	public Ant(int id, Vector2 position) {
-		super(id, position,5f);
+	public Ant(int id, Sprite sprite, Vector2 position) {
+		super(id, sprite, position,5f);
 		setSize(5f,5f);
 		setSpeed(100f);
 
@@ -144,18 +144,18 @@ public class Ant extends MovingEntity implements Observer {
 	// Below contains the methods called by WorldRenderer used for drawing
 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch, Sprite sprite) {
+	public boolean draw(SpriteBatch spriteBatch) {
 		performMove();
 
-		sprite.setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
+		getSprite().setPosition(getPosition().x-getSize().x*5/2, getPosition().y-getSize().y*5/2);
 		// Note: right now the sprite size is scaled by a factor of 5 - purely
 		// based on trial and error for looks.  Needs to be tied somehow to screen
 		// size in case I decide to change it again.
-		sprite.setSize(getSize().x*5,getSize().y*5);
-		sprite.setOrigin(getSize().x*5/2, getSize().y*5/2);
-		sprite.setRotation(getTarget());
+		getSprite().setSize(getSize().x*5,getSize().y*5);
+		getSprite().setOrigin(getSize().x*5/2, getSize().y*5/2);
+		getSprite().setRotation(getTarget());
 
-		sprite.draw(spriteBatch);
+		getSprite().draw(spriteBatch);
 
 		return true;
 	}

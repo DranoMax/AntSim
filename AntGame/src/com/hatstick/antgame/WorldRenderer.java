@@ -42,12 +42,6 @@ public class WorldRenderer {
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 
-	// Load textures to be used in this level
-	private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("drawable/antsim.pack"));
-	private Sprite antSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("ant")));
-	private Sprite foodSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("food")));
-	private Sprite anthillSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("anthill")));
-
 	private Level level;
 
 	private ArrayList<Ant> newAnts = new ArrayList<Ant>();
@@ -239,30 +233,17 @@ public class WorldRenderer {
 		for(Iterator<Entity> iter = level.getEntities().keySet().iterator(); iter.hasNext(); ) {
 			Entity entity = iter.next();
 
-			if( entity instanceof Anthill) {
-				if (!entity.draw(spriteBatch, anthillSprite)) {
-					iter.remove();
-				}
-				Ant ant = ((Anthill) entity).createAnt();
-				if( ant != null ) {
-					newAnts.add(ant);
-				}
-			}
-			else if( entity instanceof Food) {
-				if (!entity.draw(spriteBatch, foodSprite)) {
-					iter.remove();
-				}
-			}
-			else if( entity instanceof Ant) {
-				if (!entity.draw(spriteBatch, antSprite)) {
-					iter.remove();
-				}
+			if( entity instanceof Ant) {
 				checkAntPositions(entity);
 			}
+			if (!entity.draw(spriteBatch)) {
+				iter.remove();
+			}
 		}
-		spriteBatch.end();
+			spriteBatch.end();
 
-		createNewAnts();
-		handleCameraMovements();
+			createNewAnts();
+			handleCameraMovements();
+		
 	}
 }

@@ -20,8 +20,8 @@ public class Anthill extends Entity {
 
 	private BitmapFont font;
 
-	public Anthill(int id, Vector2 position) {
-		super(id, position,60f);
+	public Anthill(int id, Sprite sprite, Vector2 position) {
+		super(id, sprite, position, 60f);
 		setSize(60f,60f);
 		font = new BitmapFont();
 	}
@@ -45,7 +45,8 @@ public class Anthill extends Entity {
 		if (newAntTimer >= NEW_ANT_WAIT && foodStores >= 5) {
 			foodStores -= 5;
 			newAntTimer -= NEW_ANT_WAIT;
-			return new Ant(0, new Vector2(getPosition().x+getSize().x/2,getPosition().y+getSize().y/2));
+	//		return new Ant(0, new Vector2(getPosition().x+getSize().x/2,getPosition().y+getSize().y/2));
+			return null;
 		}
 		else {
 			return null;
@@ -53,14 +54,14 @@ public class Anthill extends Entity {
 	}
 
 	@Override
-	public boolean draw(SpriteBatch spriteBatch, Sprite sprite) {
+	public boolean draw(SpriteBatch spriteBatch) {
 
-		sprite.setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
+		getSprite().setPosition(getPosition().x-getSize().x*2.5f/2, getPosition().y-getSize().y*2.5f/2);
 		// Note: right now the sprite size is scaled by a factor of 2.5 - purely
 		// based on trial and error for looks.  Needs to be tied somehow to screen
 		// size in case I decide to change it again.
-		sprite.setSize(getSize().x*2.5f,getSize().y*2.5f);
-		sprite.draw(spriteBatch);
+		getSprite().setSize(getSize().x*2.5f,getSize().y*2.5f);
+		getSprite().draw(spriteBatch);
 
 
 		// Draw our food levels
