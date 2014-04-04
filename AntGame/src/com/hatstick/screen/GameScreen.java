@@ -45,17 +45,17 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 	 */
 	private Circle touchCircle = new Circle(0,0,20);
 
-	@Override
-	public void show() {
+	public GameScreen() {
 		renderer = new WorldRenderer(new Level());
-
 		createMenu();
-
 		multi.addProcessor(menu);
 		multi.addProcessor(new GestureDetector(this));
 		multi.addProcessor(new InputMultiplexer(this));
+	}
+	
+	@Override
+	public void show() {
 		Gdx.input.setInputProcessor(multi);
-
 	}
 
 	public void createMenu() {
@@ -63,17 +63,9 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 		skin = new Skin(Gdx.files.internal("data/ui/uiskin.json"));
 
 		final TextButton nodesButton = new TextButton("Nodes",skin,"default");
-		final TextButton pathButton = new TextButton("Path",skin,"default");
-
 		nodesButton.setWidth(Gdx.graphics.getWidth()/9);
-		pathButton.setWidth(Gdx.graphics.getWidth()/9);
-
 		nodesButton.setHeight(Gdx.graphics.getHeight()/8);
-		pathButton.setHeight(Gdx.graphics.getHeight()/8);
-
 		nodesButton.setPosition(0, Gdx.graphics.getHeight()-nodesButton.getHeight());
-		pathButton.setPosition(nodesButton.getWidth(), Gdx.graphics.getHeight()-pathButton.getHeight());
-
 		nodesButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -86,7 +78,11 @@ public class GameScreen implements Screen, InputProcessor, GestureListener {
 			}
 		});
 		menu.addActor(nodesButton);
-
+		
+		final TextButton pathButton = new TextButton("Path",skin,"default");
+		pathButton.setWidth(Gdx.graphics.getWidth()/9);
+		pathButton.setHeight(Gdx.graphics.getHeight()/8);
+		pathButton.setPosition(nodesButton.getWidth(), Gdx.graphics.getHeight()-pathButton.getHeight());
 		pathButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
